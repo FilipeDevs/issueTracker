@@ -62,6 +62,18 @@ const API = {
                 console.error("Error fetching projects:", error);
             });
     },
+
+    getUsers: (setUsers, setLoading) => {
+        axiosClient
+            .get("/users")
+            .then((response) => {
+                setUsers(response.data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error fetching users:", error);
+            });
+    },
 };
 
 export default API;

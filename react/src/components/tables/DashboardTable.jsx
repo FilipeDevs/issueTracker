@@ -1,13 +1,23 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import API from "../../utils/API";
+import CreateProject from "../forms/CreateProject";
 
 function DashboardTable() {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [hasMoreProjects, setHasMoreProjects] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [users, setUsers] = useState([]);
 
+    // Fetch all users
+    useEffect(() => {
+        setLoading(true);
+        API.getUsers(setUsers, setLoading);
+    }, []);
+
+    // Fetch all projects (3 per page)
     useEffect(() => {
         setLoading(true);
         API.getProjects(
@@ -17,10 +27,6 @@ function DashboardTable() {
             setHasMoreProjects
         );
     }, [currentPage]);
-
-    if (!loading) {
-        console.log(projects);
-    }
 
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
@@ -54,6 +60,7 @@ function DashboardTable() {
                 <div className="items-center">
                     <button
                         type="button"
+                        onClick={() => setIsModalOpen(true)}
                         className="px-3 h-8 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover-bg-blue-700 dark:focus:ring-blue-800"
                     >
                         New project
@@ -131,6 +138,12 @@ function DashboardTable() {
                 >
                     Next
                 </button>
+                {isModalOpen && (
+                    <CreateProject
+                        onClose={() => setIsModalOpen(false)}
+                        users={users}
+                    />
+                )}
             </div>
         </div>
     );
