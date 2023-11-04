@@ -1,6 +1,27 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import API from "../../utils/API";
 
 function DashboardTable() {
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasMoreProjects, setHasMoreProjects] = useState(true);
+
+    useEffect(() => {
+        setLoading(true);
+        API.getProjects(
+            setProjects,
+            setLoading,
+            currentPage,
+            setHasMoreProjects
+        );
+    }, [currentPage]);
+
+    if (!loading) {
+        console.log(projects);
+    }
+
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
             <h1 className="px-5 py-3 text-2xl font-medium">Projects</h1>
@@ -55,40 +76,61 @@ function DashboardTable() {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
-                        <th
-                            scope="row"
-                            className="px-6 py-4 font-medium text-blue-700 whitespace-nowrap dark:text-white"
-                        >
-                            <Link to={""}>Some project</Link>
-                        </th>
-                        <td className="px-6 py-4">
-                            <p>A description to the project....</p>
-                        </td>
-                        <td className="px-6 py-4">
-                            <ul>
-                                <li>Joe Mama</li>
-                                <li>Joe Mama</li>
-                            </ul>
-                        </td>
-                        <td className="px-1 py-1 underline">Edit</td>
-                    </tr>
+                    {!loading &&
+                        projects.map((project) => (
+                            <tr
+                                key={project.id}
+                                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover-bg-gray-600"
+                            >
+                                <th
+                                    scope="row"
+                                    className="px-6 py-4 font-medium text-blue-700 whitespace-nowrap dark:text-white"
+                                >
+                                    <Link to={`project/${project.id}`}>
+                                        {project.name}
+                                    </Link>
+                                </th>
+                                <td className="px-6 py-4">
+                                    <p>{project.description}</p>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <ul>
+                                        {project.users
+                                            .slice(0, 2)
+                                            .map((contributor) => (
+                                                <li key={contributor.id}>
+                                                    {contributor.name}
+                                                </li>
+                                            ))}
+                                    </ul>
+                                </td>
+                                <td className="px-1 py-1 underline">Edit</td>
+                            </tr>
+                        ))}
                 </tbody>
             </table>
             <div className="flex p-5">
-                <a
-                    href="#"
-                    className="flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                <button
+                    type="button"
+                    onClick={() => setCurrentPage((prevPage) => prevPage - 1)}
+                    disabled={currentPage == 1}
+                    className={`flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover-bg-gray-700 dark:hover-text-white ${
+                        currentPage === 1 ? "cursor-not-allowed" : ""
+                    }`}
                 >
                     Previous
-                </a>
+                </button>
 
-                <a
-                    href="#"
-                    className="flex items-center justify-center px-3 h-8 ml-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                <button
+                    type="button"
+                    disabled={!hasMoreProjects}
+                    onClick={() => setCurrentPage((prevPage) => prevPage + 1)}
+                    className={`flex items-center justify-center px-3 h-8 ml-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover-bg-gray-100 hover-text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover-bg-gray-700 dark:hover-text-white ${
+                        !hasMoreProjects ? "cursor-not-allowed" : ""
+                    }`}
                 >
                     Next
-                </a>
+                </button>
             </div>
         </div>
     );

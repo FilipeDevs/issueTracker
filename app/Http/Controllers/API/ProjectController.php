@@ -8,10 +8,24 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // List all projects
-        $projects = Project::all();
+        $request->validate([
+            'page' => 'integer|nullable|min:1',
+            // Page number should be a positive integer, default is 1
+        ]);
+
+        $page = $request->input('page', 1);
+        $perPage = 3;
+
+        // Calculate the offset based on the page number
+        $offset = ($page - 1) * $perPage;
+
+        $projects = Project::with('users')
+            ->offset($offset)
+            ->limit($perPage)
+            ->get();
+
         return response()->json($projects);
     }
 
@@ -43,6 +57,5 @@ class ProjectController extends Controller
         Project::destroy($id);
         return response()->json(null, 204);
     }
-
 
 }

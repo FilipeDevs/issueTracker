@@ -49,6 +49,19 @@ const API = {
             toast.success(response.data.message);
         });
     },
+
+    getProjects: (setProjects, setLoading, page, setHasMoreProjects) => {
+        axiosClient
+            .get(`/projects?page=${page}`)
+            .then((response) => {
+                setProjects(response.data);
+                setHasMoreProjects(response.data.length >= 3);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error("Error fetching projects:", error);
+            });
+    },
 };
 
 export default API;
