@@ -41,6 +41,14 @@ const API = {
                 }
             });
     },
+
+    logout: (setToken, setUser) => {
+        axiosClient.post("/logout").then((response) => {
+            setUser(null);
+            setToken(null);
+            toast.success(response.data.message);
+        });
+    },
 };
 
 export default API;

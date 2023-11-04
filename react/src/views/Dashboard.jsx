@@ -9,7 +9,11 @@ function Dashboard() {
         return <Navigate to="/login" />;
     }
 
-    return <div> Hello, {user} 👋</div>;
+    return (
+        <div className="p-4 sm:ml-64">
+            <p>Hello {user}</p>
+        </div>
+    );
 }
 
 export default Dashboard;
