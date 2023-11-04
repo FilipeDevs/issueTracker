@@ -4,6 +4,7 @@ import Login from "./views/Login";
 import Register from "./views/Register";
 import UserLayout from "./components/UserLayout";
 import Dashboard from "./views/Dashboard";
+import Tickets from "./views/Tickets";
 
 const router = createBrowserRouter([
     {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard",
                 element: <Dashboard />,
+            },
+            {
+                path: "/tickets",
+                element: <Tickets />,
             },
         ],
     },

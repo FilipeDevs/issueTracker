@@ -3,9 +3,12 @@ import Sidebar from "./Sidebar";
 
 function UserLayout() {
     return (
-        <main>
+        <main className="">
             <Sidebar />
-            <Outlet />
+            <div className="h-screen bg-blue-100">
+                <h1></h1>
+                <Outlet />
+            </div>
         </main>
     );
 }
