@@ -1,15 +1,24 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import API from "../../utils/API";
 import CreateProject from "../forms/CreateProject";
+import Loading from "../Loading";
+import UpdateProject from "../forms/UpdateProject";
+import DashboardTableRow from "./DashboardTableRow";
 
 function DashboardTable() {
     const [projects, setProjects] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [hasMoreProjects, setHasMoreProjects] = useState(true);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
+    const [selectedProjectData, setSelectedProjectData] = useState({});
+
+    // Pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(3);
+
+    // Table Refresh
+    const [projectDataChanged, setProjectDataChanged] = useState(false);
 
     // Fetch all users
     useEffect(() => {
@@ -20,13 +29,28 @@ function DashboardTable() {
     // Fetch all projects (3 per page)
     useEffect(() => {
         setLoading(true);
-        API.getProjects(
-            setProjects,
-            setLoading,
-            currentPage,
-            setHasMoreProjects
-        );
-    }, [currentPage]);
+        API.getProjects(setProjects, setLoading);
+    }, [projectDataChanged]);
+
+    // Pagination Logic
+    const indexOfLastProject = currentPage * itemsPerPage;
+    const indexOfFirstProject = indexOfLastProject - itemsPerPage;
+    const currentProjects = projects.slice(
+        indexOfFirstProject,
+        indexOfLastProject
+    );
+
+    const handleNextPage = () => {
+        if (indexOfLastProject < projects.length) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (indexOfFirstProject > 0) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
 
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
@@ -56,46 +80,35 @@ function DashboardTable() {
                     </tr>
                 </thead>
                 <tbody>
-                    {!loading &&
-                        projects.map((project) => (
-                            <tr
+                    {loading ? (
+                        <tr>
+                            <td colSpan="4">
+                                <Loading />
+                            </td>
+                        </tr>
+                    ) : (
+                        currentProjects.map((project) => (
+                            <DashboardTableRow
                                 key={project.id}
-                                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover-bg-gray-600"
-                            >
-                                <th
-                                    scope="row"
-                                    className="px-6 py-4 font-medium text-blue-700 whitespace-nowrap dark:text-white"
-                                >
-                                    <Link to={`project/${project.id}`}>
-                                        {project.name}
-                                    </Link>
-                                </th>
-                                <td className="px-6 py-4">
-                                    <p>{project.description}</p>
-                                </td>
-                                <td className="px-6 py-4">
-                                    <ul>
-                                        {project.users
-                                            .slice(0, 2)
-                                            .map((contributor) => (
-                                                <li key={contributor.id}>
-                                                    {contributor.name}
-                                                </li>
-                                            ))}
-                                    </ul>
-                                </td>
-                                <td className="px-1 py-1 underline">Edit</td>
-                            </tr>
-                        ))}
+                                project={project}
+                                updateData={() =>
+                                    setSelectedProjectData(project)
+                                }
+                                openUpdateForm={() =>
+                                    setIsModalUpdateOpen(true)
+                                }
+                            />
+                        ))
+                    )}
                 </tbody>
             </table>
             <div className="flex p-5">
                 <button
                     type="button"
-                    onClick={() => setCurrentPage((prevPage) => prevPage - 1)}
-                    disabled={currentPage == 1}
+                    onClick={handlePreviousPage}
+                    disabled={indexOfFirstProject === 0}
                     className={`flex items-center justify-center px-3 h-8 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover-bg-gray-700 dark:hover-text-white ${
-                        currentPage === 1 ? "cursor-not-allowed" : ""
+                        indexOfFirstProject === 0 ? "cursor-not-allowed" : ""
                     }`}
                 >
                     Previous
@@ -103,10 +116,12 @@ function DashboardTable() {
 
                 <button
                     type="button"
-                    disabled={!hasMoreProjects}
-                    onClick={() => setCurrentPage((prevPage) => prevPage + 1)}
+                    onClick={handleNextPage}
+                    disabled={indexOfLastProject >= projects.length}
                     className={`flex items-center justify-center px-3 h-8 ml-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover-bg-gray-100 hover-text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover-bg-gray-700 dark:hover-text-white ${
-                        !hasMoreProjects ? "cursor-not-allowed" : ""
+                        indexOfLastProject >= projects.length
+                            ? "cursor-not-allowed"
+                            : ""
                     }`}
                 >
                     Next
@@ -115,6 +130,13 @@ function DashboardTable() {
                     <CreateProject
                         onClose={() => setIsModalOpen(false)}
                         users={users}
+                        projectDataChanged={setProjectDataChanged}
+                    />
+                )}
+                {isModalUpdateOpen && (
+                    <UpdateProject
+                        onClose={() => setIsModalUpdateOpen(false)}
+                        projectData={selectedProjectData}
                     />
                 )}
             </div>

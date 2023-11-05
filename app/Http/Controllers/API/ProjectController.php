@@ -4,29 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
     public function index(Request $request)
     {
-        $request->validate([
-            'page' => 'integer|nullable|min:1',
-            // Page number should be a positive integer, default is 1
-        ]);
-
-        $page = $request->input('page', 1);
-        $perPage = 3;
-
-        // Calculate the offset based on the page number
-        $offset = ($page - 1) * $perPage;
-
-        $projects = Project::with('users')
-            ->offset($offset)
-            ->limit($perPage)
-            ->get();
-
+        $projects = Project::with('users')->get();
         return response()->json($projects);
     }
 

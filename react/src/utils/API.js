@@ -48,12 +48,11 @@ const API = {
         });
     },
 
-    getProjects: (setProjects, setLoading, page, setHasMoreProjects) => {
+    getProjects: (setProjects, setLoading) => {
         axiosClient
-            .get(`/projects?page=${page}`)
+            .get("/projects")
             .then((response) => {
                 setProjects(response.data);
-                setHasMoreProjects(response.data.length >= 3);
                 setLoading(false);
             })
             .catch((error) => {
@@ -73,11 +72,12 @@ const API = {
             });
     },
 
-    createProject: (project) => {
+    createProject: (project, setProjects) => {
         axiosClient
             .post("/projects", project)
             .then((response) => {
                 toast.success("New project created !");
+                setProjects((prevProjects) => [...prevProjects, response.data]);
             })
             .catch((error) => {
                 console.error(

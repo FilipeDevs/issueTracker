@@ -1,27 +1,6 @@
 import API from "../../utils/API";
 
-function CreateProject({ onClose, users, projectDataChanged }) {
-    const handleCreateProject = (e) => {
-        e.preventDefault();
-        const form = e.target;
-        const name = form.name.value;
-        const description = form.description.value;
-        const contributors = Array.from(
-            form.contributors.selectedOptions,
-            (option) => option.value
-        );
-
-        const project = {
-            name,
-            description,
-            contributors,
-        };
-
-        API.createProject(project);
-
-        projectDataChanged();
-    };
-
+function UpdateProject({ onClose, projectData }) {
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50 max-h-full">
             <div className="absolute inset-0 bg-black opacity-30"></div>
@@ -52,12 +31,9 @@ function CreateProject({ onClose, users, projectDataChanged }) {
                     </button>
                     <div className="px-6 py-6 lg:px-8">
                         <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-                            Create a new project
+                            Update project
                         </h3>
-                        <form
-                            className="space-y-6"
-                            onSubmit={handleCreateProject}
-                        >
+                        <form className="space-y-6">
                             <div>
                                 <label
                                     htmlFor="name"
@@ -66,6 +42,7 @@ function CreateProject({ onClose, users, projectDataChanged }) {
                                     Project name
                                 </label>
                                 <input
+                                    value={projectData.name}
                                     type="text"
                                     name="name"
                                     id="name"
@@ -81,6 +58,7 @@ function CreateProject({ onClose, users, projectDataChanged }) {
                                     Descritpion
                                 </label>
                                 <textarea
+                                    value={projectData.description}
                                     type="text"
                                     name="description"
                                     id="description"
@@ -89,33 +67,13 @@ function CreateProject({ onClose, users, projectDataChanged }) {
                                 ></textarea>
                             </div>
                             <div>
-                                <label
-                                    htmlFor="contributors"
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                >
-                                    Contributors
-                                </label>
-                                <select
-                                    multiple
-                                    name="contributors"
-                                    id="contributors"
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-600 dark:border-gray-500 dark:text-white"
-                                    required
-                                >
-                                    {users.map((user) => (
-                                        <option key={user.id} value={user.id}>
-                                            {user.name}
-                                        </option>
-                                    ))}
-                                </select>
+                                <button className="my-3 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                    Update
+                                </button>
+                                <button className="w-full text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                                    Delete
+                                </button>
                             </div>
-
-                            <button
-                                type="submit"
-                                className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            >
-                                Create
-                            </button>
                         </form>
                     </div>
                 </div>
@@ -124,4 +82,4 @@ function CreateProject({ onClose, users, projectDataChanged }) {
     );
 }
 
-export default CreateProject;
+export default UpdateProject;
