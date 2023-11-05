@@ -1,4 +1,25 @@
+import API from "../../utils/API";
+
 function CreateProject({ onClose, users }) {
+    const handleCreateProject = (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const name = form.name.value;
+        const description = form.description.value;
+        const contributors = Array.from(
+            form.contributors.selectedOptions,
+            (option) => option.value
+        );
+
+        const project = {
+            name,
+            description,
+            contributors,
+        };
+
+        API.createProject(project);
+    };
+
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50 max-h-full">
             <div className="absolute inset-0 bg-black opacity-30"></div>
@@ -31,7 +52,10 @@ function CreateProject({ onClose, users }) {
                         <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
                             Create a new project
                         </h3>
-                        <form className="space-y-6" action="#">
+                        <form
+                            className="space-y-6"
+                            onSubmit={handleCreateProject}
+                        >
                             <div>
                                 <label
                                     htmlFor="name"
@@ -40,7 +64,7 @@ function CreateProject({ onClose, users }) {
                                     Project name
                                 </label>
                                 <input
-                                    type="email"
+                                    type="text"
                                     name="name"
                                     id="name"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
@@ -49,15 +73,15 @@ function CreateProject({ onClose, users }) {
                             </div>
                             <div>
                                 <label
-                                    htmlFor="password"
+                                    htmlFor="description"
                                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                 >
                                     Descritpion
                                 </label>
                                 <textarea
                                     type="text"
-                                    name="password"
-                                    id="password"
+                                    name="description"
+                                    id="description"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                                     required
                                 ></textarea>

@@ -9,7 +9,6 @@ const API = {
             .then((response) => {
                 setUser(response.data.user.name);
                 setToken(response.data.token);
-                toast.success(response.data.message);
             })
             .catch((errors) => {
                 const response = errors.response;
@@ -25,7 +24,6 @@ const API = {
             .then((response) => {
                 setUser(response.data.user.name);
                 setToken(response.data.token);
-                toast.success(response.data.message);
             })
             .catch((errors) => {
                 const response = errors.response;
@@ -72,6 +70,22 @@ const API = {
             })
             .catch((error) => {
                 console.error("Error fetching users:", error);
+            });
+    },
+
+    createProject: (project) => {
+        axiosClient
+            .post("/projects", project)
+            .then((response) => {
+                toast.success("New project created !");
+            })
+            .catch((error) => {
+                console.error(
+                    "Error creating new project:",
+                    error.response.data.message
+                );
+
+                toast.error(error.response.data.message);
             });
     },
 };

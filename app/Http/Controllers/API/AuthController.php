@@ -23,9 +23,8 @@ class AuthController extends Controller
         ]);
 
         $token = $user->createToken('main')->plainTextToken;
-        $message = "Registration Successful";
 
-        return response(compact('user', 'token', 'message'));
+        return response(compact('user', 'token'));
     }
 
     public function login(LoginRequest $request)
@@ -40,9 +39,8 @@ class AuthController extends Controller
         /** @var \App\Models\User $user*/
         $user = Auth::user();
         $token = $user->createToken('main')->plainTextToken;
-        $message = "Login Successful";
 
-        return response(compact('user', 'token', 'message'));
+        return response(compact('user', 'token'));
     }
 
     public function logout(Request $request)

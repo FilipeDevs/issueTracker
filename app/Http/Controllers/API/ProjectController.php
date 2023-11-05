@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -38,8 +39,16 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
-        // Store a new project in the database
-        $project = Project::create($request->all());
+        $validatedData = $request->validate([
+            'name' => 'required|string|between:5,25|unique:projects',
+            'description' => 'required|string|max:100',
+            'contributors' => 'required|array',
+        ]);
+
+        $project = Project::create($validatedData);
+
+        $project->users()->attach($request->input('contributors'));
+
         return response()->json($project, 201);
     }
 

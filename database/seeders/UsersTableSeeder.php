@@ -20,7 +20,7 @@ class UsersTableSeeder extends Seeder
             ->create()
             ->each(function ($user) {
                 $projects = Project::inRandomOrder()
-                    ->limit(3) // Adjust the number of projects to associate with each user
+                    ->limit(3)
                     ->get();
                 $user->projects()->attach($projects);
             });
