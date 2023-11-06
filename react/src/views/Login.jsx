@@ -14,11 +14,7 @@ function Login() {
         return <Navigate to={"/dashboard"} />;
     }
 
-    const updateErrors = (newErrors) => {
-        setErrors(newErrors);
-    };
-
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         setErrors(null); // Clear any previous errors
 
@@ -27,7 +23,20 @@ function Login() {
             password: passwordRef.current.value,
         };
 
-        API.login(payload, updateErrors, setToken, setUser);
+        try {
+            const data = await API.login(payload);
+            setUser(data.user.name);
+            setToken(data.token);
+        } catch (errors) {
+            if (errors.response && errors.response.status === 422) {
+                const response = errors.response;
+                const errorMessages = response.data.errors || {
+                    email: [response.data.message],
+                    password: [response.data.message],
+                };
+                setErrors(errorMessages);
+            }
+        }
     };
 
     return (

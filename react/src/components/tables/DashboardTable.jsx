@@ -22,14 +22,33 @@ function DashboardTable() {
 
     // Fetch all users
     useEffect(() => {
-        setLoading(true);
-        API.getUsers(setUsers, setLoading);
+        const fetchUsers = async () => {
+            try {
+                const data = await API.getUsers();
+                setUsers(data);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        };
+
+        fetchUsers();
     }, []);
 
     // Fetch all projects (3 per page)
     useEffect(() => {
-        setLoading(true);
-        API.getProjects(setProjects, setLoading);
+        const fetchProjects = async () => {
+            try {
+                setLoading(true);
+                const data = await API.getProjects();
+                setProjects(data);
+            } catch (error) {
+                console.error("Error fetching projects:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProjects();
     }, [projectDataChanged]);
 
     // Pagination Logic
@@ -130,7 +149,9 @@ function DashboardTable() {
                     <CreateProject
                         onClose={() => setIsModalOpen(false)}
                         users={users}
-                        projectDataChanged={setProjectDataChanged}
+                        projectDataChanged={() =>
+                            setProjectDataChanged(!projectDataChanged)
+                        }
                     />
                 )}
                 {isModalUpdateOpen && (

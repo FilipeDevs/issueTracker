@@ -1,7 +1,9 @@
 import API from "../../utils/API";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function CreateProject({ onClose, users, projectDataChanged }) {
-    const handleCreateProject = (e) => {
+    const handleCreateProject = async (e) => {
         e.preventDefault();
         const form = e.target;
         const name = form.name.value;
@@ -17,9 +19,17 @@ function CreateProject({ onClose, users, projectDataChanged }) {
             contributors,
         };
 
-        API.createProject(project);
-
-        projectDataChanged();
+        try {
+            await API.createProject(project);
+            projectDataChanged();
+            toast.success("New project created!");
+        } catch (error) {
+            console.error(
+                "Error creating new project:",
+                error.response.data.message
+            );
+            toast.error(error.response.data.message);
+        }
     };
 
     return (

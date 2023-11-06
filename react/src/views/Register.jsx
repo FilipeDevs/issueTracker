@@ -16,11 +16,7 @@ function Register() {
         return <Navigate to={"/dashboard"} />;
     }
 
-    const updateErrors = (newErrors) => {
-        setErrors(newErrors);
-    };
-
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
         setErrors(null); // Clear any previous errors
 
@@ -31,7 +27,15 @@ function Register() {
             password_confirmation: passwordConfirmationRef.current.value,
         };
 
-        API.register(payload, updateErrors, setToken, setUser);
+        try {
+            const data = await API.register(payload);
+            setUser(data.user.name);
+            setToken(data.token);
+        } catch (errors) {
+            if (errors.response && errors.response.status === 422) {
+                setErrors(errors.response.data.errors);
+            }
+        }
     };
 
     return (

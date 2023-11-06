@@ -2,13 +2,22 @@ import { Collapse } from "flowbite";
 import { Link } from "react-router-dom";
 import API from "../utils/API";
 import { useStateContext } from "../contexts/ContextProvider";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Sidebar() {
     const { setUser, setToken } = useStateContext();
 
-    const handleLogout = (e) => {
+    const handleLogout = async (e) => {
         e.preventDefault();
-        API.logout(setToken, setUser);
+        try {
+            await API.logout();
+            setUser(null);
+            setToken(null);
+        } catch (errors) {
+            toast.error("Error logging out!");
+            console.error(errors);
+        }
     };
 
     return (

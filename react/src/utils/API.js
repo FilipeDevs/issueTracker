@@ -1,92 +1,58 @@
 import axiosClient from "../clients/axios-client";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const API = {
-    register: (payload, setErrorCallback, setToken, setUser) => {
-        axiosClient
-            .post("/register", payload)
-            .then((response) => {
-                setUser(response.data.user.name);
-                setToken(response.data.token);
-            })
-            .catch((errors) => {
-                const response = errors.response;
-                if (response && response.status === 422) {
-                    setErrorCallback(response.data.errors);
-                }
-            });
+    register: async (payload) => {
+        try {
+            const response = await axiosClient.post("/register", payload);
+            return response.data;
+        } catch (errors) {
+            return await Promise.reject(errors);
+        }
     },
 
-    login: (payload, setErrorCallback, setToken, setUser) => {
-        axiosClient
-            .post("/login", payload)
-            .then((response) => {
-                setUser(response.data.user.name);
-                setToken(response.data.token);
-            })
-            .catch((errors) => {
-                const response = errors.response;
-                if (response && response.status === 422) {
-                    if (response.data.errors) {
-                        setErrorCallback(response.data.errors);
-                    } else {
-                        setErrorCallback({
-                            email: [response.data.message],
-                            password: [response.data.message],
-                        });
-                    }
-                }
-            });
+    login: async (payload) => {
+        try {
+            const response = await axiosClient.post("/login", payload);
+            return response.data;
+        } catch (errors) {
+            return await Promise.reject(errors);
+        }
     },
 
-    logout: (setToken, setUser) => {
-        axiosClient.post("/logout").then((response) => {
-            setUser(null);
-            setToken(null);
-            toast.success(response.data.message);
-        });
+    logout: async () => {
+        try {
+            const response = await axiosClient.post("/logout");
+            return response.data;
+        } catch (errors) {
+            return await Promise.reject(errors);
+        }
     },
 
-    getProjects: (setProjects, setLoading) => {
-        axiosClient
-            .get("/projects")
-            .then((response) => {
-                setProjects(response.data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error fetching projects:", error);
-            });
+    getProjects: async () => {
+        try {
+            const response = await axiosClient.get("/projects");
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
     },
 
-    getUsers: (setUsers, setLoading) => {
-        axiosClient
-            .get("/users")
-            .then((response) => {
-                setUsers(response.data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error fetching users:", error);
-            });
+    getUsers: async () => {
+        try {
+            const response = await axiosClient.get("/users");
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
     },
 
-    createProject: (project, setProjects) => {
-        axiosClient
-            .post("/projects", project)
-            .then((response) => {
-                toast.success("New project created !");
-                setProjects((prevProjects) => [...prevProjects, response.data]);
-            })
-            .catch((error) => {
-                console.error(
-                    "Error creating new project:",
-                    error.response.data.message
-                );
-
-                toast.error(error.response.data.message);
-            });
+    createProject: async (project) => {
+        try {
+            const response = await axiosClient.post("/projects", project);
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
     },
 };
 
