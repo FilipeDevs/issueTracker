@@ -8,6 +8,22 @@ function UpdateProject({ onClose, projectData, projectDataChanged }) {
         description: projectData.description,
     });
 
+    const handleDeleteProject = async (e) => {
+        e.preventDefault();
+        try {
+            await API.deleteProject(projectData);
+            projectDataChanged();
+            onClose();
+            toast.success("Project was deleted !");
+        } catch (error) {
+            console.error(
+                "Error deleting the project:",
+                error.response.data.message
+            );
+            toast.error("Error deleting the project !");
+        }
+    };
+
     const handleUpdateProject = async (e) => {
         e.preventDefault();
 
@@ -112,7 +128,11 @@ function UpdateProject({ onClose, projectData, projectDataChanged }) {
                                 >
                                     Update
                                 </button>
-                                <button className="w-full text-white bg-red-700 hover:bg-red-800 focus-ring-4 focus-outline-none focus-ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark-bg-red-600 dark-hover-bg-red-700 dark-focus-ring-red-800">
+                                <button
+                                    onClick={handleDeleteProject}
+                                    type="button"
+                                    className="w-full text-white bg-red-700 hover:bg-red-800 focus-ring-4 focus-outline-none focus-ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark-bg-red-600 dark-hover-bg-red-700 dark-focus-ring-red-800"
+                                >
                                     Delete
                                 </button>
                             </div>
