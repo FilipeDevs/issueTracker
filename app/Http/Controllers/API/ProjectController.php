@@ -38,9 +38,26 @@ class ProjectController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Update the project in the database
+        $validatedData = $request->validate([
+            // Allow the current project's name
+            'name' => 'string|between:5,25|unique:projects,name,' . $id,
+            'description' => 'string|max:100',
+            'contributors' => 'array',
+        ]);
+
         $project = Project::find($id);
-        $project->update($request->all());
+
+        if (!$project) {
+            return response()->json(['message' => 'Project not found'], 404);
+        }
+
+        $project->update($validatedData);
+
+        // Sync contributors if provided
+        if ($request->has('contributors')) {
+            $project->users()->sync($request->input('contributors'));
+        }
+
         return response()->json($project);
     }
 

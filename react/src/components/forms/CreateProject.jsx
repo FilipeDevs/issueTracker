@@ -22,6 +22,7 @@ function CreateProject({ onClose, users, projectDataChanged }) {
         try {
             await API.createProject(project);
             projectDataChanged();
+            onClose();
             toast.success("New project created!");
         } catch (error) {
             console.error(

@@ -54,6 +54,18 @@ const API = {
             return await Promise.reject(error);
         }
     },
+
+    updateProject: async (project) => {
+        try {
+            const response = await axiosClient.put(
+                `/projects/${project.id}`,
+                project
+            );
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
 };
 
 export default API;

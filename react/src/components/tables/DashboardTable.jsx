@@ -158,6 +158,9 @@ function DashboardTable() {
                     <UpdateProject
                         onClose={() => setIsModalUpdateOpen(false)}
                         projectData={selectedProjectData}
+                        projectDataChanged={() =>
+                            setProjectDataChanged(!projectDataChanged)
+                        }
                     />
                 )}
             </div>
