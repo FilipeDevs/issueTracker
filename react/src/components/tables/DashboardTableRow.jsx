@@ -15,7 +15,7 @@ function DashboardTableRow({ project, updateData, openUpdateForm }) {
                 scope="row"
                 className="px-6 py-4 font-medium text-blue-700 whitespace-nowrap dark:text-white"
             >
-                <Link to={`project/${project.id}`}>{project.name}</Link>
+                <Link to={`/project/${project.id}`}>{project.name}</Link>
             </th>
             <td className="px-6 py-4">
                 <p>{project.description}</p>

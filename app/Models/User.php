@@ -48,6 +48,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Project::class);
     }
 
+    public function tickets()
+    {
+        return $this->belongsToMany(Ticket::class);
+    }
+
     // Users not associated with a specific project
     public function scopeNotInProject(Builder $query, $projectId)
     {

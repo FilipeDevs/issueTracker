@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Project;
 use App\Models\User;
-use Database\Factories\UserFactory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
@@ -15,8 +13,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        UserFactory::new()
-            ->count(10)
+        User::factory(5)
             ->create()
             ->each(function ($user) {
                 $projects = Project::inRandomOrder()

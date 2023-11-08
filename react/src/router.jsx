@@ -5,6 +5,8 @@ import Register from "./views/Register";
 import UserLayout from "./components/UserLayout";
 import Dashboard from "./views/Dashboard";
 import Tickets from "./views/Tickets";
+import Project from "./views/Project";
+import NotFound from "./views/NotFound";
 
 const router = createBrowserRouter([
     {
@@ -28,6 +30,10 @@ const router = createBrowserRouter([
             {
                 path: "/dashboard",
                 element: <Dashboard />,
+            },
+            {
+                path: "/project/:id",
+                element: <Project />,
             },
             {
                 path: "/tickets",

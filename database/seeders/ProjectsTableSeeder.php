@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Project;
-use Database\Factories\ProjectFactory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ProjectsTableSeeder extends Seeder
@@ -14,8 +12,6 @@ class ProjectsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        ProjectFactory::new()
-            ->count(5)
-            ->create();
+        Project::factory(5)->create();
     }
 }
