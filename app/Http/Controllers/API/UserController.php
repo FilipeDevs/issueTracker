@@ -20,8 +20,19 @@ class UserController extends Controller
     // Retrieve all users not associated to a specific project
     public function availableUsers($projectId)
     {
-        $users = User::notInProject($projectId)->get();
+        $users = User::whereDoesntHave('projects', function ($query) use ($projectId) {
+            $query->where('project_id', $projectId);
+        })->get();
 
+        return response()->json($users);
+    }
+
+    // Retrieve all users associated to a specific project
+    public function assignedUsers($projectId)
+    {
+        $users = User::whereHas('projects', function ($query) use ($projectId) {
+            $query->where('project_id', $projectId);
+        })->get();
         return response()->json($users);
     }
 

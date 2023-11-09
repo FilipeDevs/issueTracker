@@ -17,6 +17,8 @@ return new class extends Migration {
             $table->enum('type', ['issue', 'feature', 'bug'])->default('issue');
             $table->enum('status', ['closed', 'new', 'in progress'])->default('new');
             $table->enum('priority', ['low', 'medium', 'high', 'immediate'])->default('medium');
+            $table->string('author_name');
+            $table->integer('time_estimate');
             $table->unsignedBigInteger('project_id');
             $table->unsignedBigInteger('author_id');
             $table->timestamps();

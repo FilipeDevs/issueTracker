@@ -17,11 +17,12 @@ class TicketFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->sentence,
-            'description' => fake()->paragraph,
+            'name' => fake()->sentence(3, true),
+            'description' => fake()->paragraph(2, true),
             'type' => fake()->randomElement(['issue', 'feature', 'bug']),
             'status' => fake()->randomElement(['closed', 'new', 'in progress']),
             'priority' => fake()->randomElement(['low', 'medium', 'high', 'immediate']),
+            'time_estimate' => fake()->numberBetween(1, 48),
         ];
     }
 }

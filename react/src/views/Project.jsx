@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import ProjectTeamTable from "../components/tables/ProjectTeamTable";
+import ProjectTicketsTable from "../components/tables/ProjectTicketsTable";
 
 function Project() {
     const { id } = useParams();
@@ -10,7 +11,7 @@ function Project() {
                 <ProjectTeamTable projectId={id} />
             </div>
             <div className="w-2/3">
-                <ProjectTeamTable projectId={id} />
+                <ProjectTicketsTable projectId={id} />
             </div>
         </div>
     );

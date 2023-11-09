@@ -22,7 +22,7 @@ class ProjectFactory extends Factory
     {
         return [
             'name' => fake()->words(2, true),
-            'description' => fake()->paragraph,
+            'description' => fake()->paragraph(2, true),
         ];
     }
 }

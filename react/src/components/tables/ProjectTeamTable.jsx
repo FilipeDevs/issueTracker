@@ -30,10 +30,10 @@ function ProjectTeamTable({ projectId }) {
 
     // Fetch all users
     useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchContributors = async () => {
             try {
                 setLoading(true);
-                const data = await API.getUsers();
+                const data = await API.getProjectContributors(projectId);
                 setUsers(data);
                 setLoading(false);
             } catch (error) {
@@ -41,7 +41,7 @@ function ProjectTeamTable({ projectId }) {
             }
         };
 
-        fetchUsers();
+        fetchContributors();
     }, []);
 
     return (

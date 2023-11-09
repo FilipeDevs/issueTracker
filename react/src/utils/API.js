@@ -77,6 +77,37 @@ const API = {
             return await Promise.reject(error);
         }
     },
+
+    getProjectContributors: async (project_id) => {
+        try {
+            const response = await axiosClient.get(
+                `/users/assigned/${project_id}`
+            );
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
+
+    getAvailableUsers: async (project_id) => {
+        try {
+            const response = await axiosClient.get(
+                `/users/available/${project_id}`
+            );
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
+
+    getProjectTickets: async (project_id) => {
+        try {
+            const response = await axiosClient.get(`/tickets/${project_id}`);
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
 };
 
 export default API;
