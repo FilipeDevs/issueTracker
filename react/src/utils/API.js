@@ -37,6 +37,15 @@ const API = {
         }
     },
 
+    getProject: async (projectId) => {
+        try {
+            const response = await axiosClient.get(`/projects/${projectId}`);
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
+
     getUsers: async () => {
         try {
             const response = await axiosClient.get("/users");
@@ -60,6 +69,30 @@ const API = {
             const response = await axiosClient.put(
                 `/projects/${project.id}`,
                 project
+            );
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
+
+    addTeamMember: async (contributors, projectId) => {
+        try {
+            const response = await axiosClient.put(
+                `/projects/addMembers/${projectId}`,
+                { contributors }
+            );
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
+
+    removeTeamMember: async (member_id, projectId) => {
+        try {
+            const response = await axiosClient.put(
+                `/projects/removeMember/${projectId}`,
+                { member_id }
             );
             return response.data;
         } catch (error) {

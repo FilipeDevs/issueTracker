@@ -68,4 +68,36 @@ class ProjectController extends Controller
         return response()->json(null, 204);
     }
 
+    // Add new contributors to a specific project
+    public function addTeamMembers(Request $request, $id)
+    {
+        $project = Project::find($id);
+
+        if (!$project) {
+            return response()->json(['message' => 'Project not found'], 404);
+        }
+
+        $validatedData = $request->validate([
+            'contributors' => 'required|array',
+        ]);
+
+        // Attach new contributors to the project
+        $project->users()->attach($validatedData['contributors']);
+
+        return response()->json($project);
+    }
+
+    public function removeTeamMember(Request $request, $id)
+    {
+        $project = Project::find($id);
+
+        if (!$project) {
+            return response()->json(['message' => 'Project not found'], 404);
+        }
+
+        $project->users()->detach($request->input('member_id'));
+
+        return response()->json($project, 204);
+    }
+
 }

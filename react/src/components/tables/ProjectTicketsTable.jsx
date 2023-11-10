@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../../utils/API";
 import Loading from "../Loading";
 
-function ProjectTicketsTable({ projectId }) {
+function ProjectTicketsTable({ project }) {
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -33,7 +33,7 @@ function ProjectTicketsTable({ projectId }) {
         const fetchProjectTickets = async () => {
             try {
                 setLoading(true);
-                const data = await API.getProjectTickets(projectId);
+                const data = await API.getProjectTickets(project.id);
                 setTickets(data);
                 setLoading(false);
             } catch (error) {
@@ -47,7 +47,7 @@ function ProjectTicketsTable({ projectId }) {
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
             <div className="flex flex-grow p-5 bg-white dark:bg-gray-900 items-center justify-between">
-                <h3 className="text-1xl font-medium">Team</h3>
+                <h3 className="text-1xl font-medium">Tickets</h3>
                 <button
                     type="button"
                     className="px-3 h-8 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover-bg-blue-700 dark:focus:ring-blue-800"
