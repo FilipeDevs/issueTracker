@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import API from "../../utils/API";
 import Loading from "../Loading";
+import CreateTicket from "../forms/CreateTicket";
 
-function ProjectTicketsTable({ project }) {
+function ProjectTicketsTable({ project, users }) {
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isModalTicketOpen, setIsModalTicketOpen] = useState(false);
+    const [ticketsDataChanged, setTicketsDataChanged] = useState(false);
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(3);
+    const [itemsPerPage] = useState(6);
 
     // Pagination Logic
     const indexOfLastTicket = currentPage * itemsPerPage;
@@ -28,7 +31,7 @@ function ProjectTicketsTable({ project }) {
         }
     };
 
-    // Fetch all users
+    // Fetch all tickets
     useEffect(() => {
         const fetchProjectTickets = async () => {
             try {
@@ -42,7 +45,7 @@ function ProjectTicketsTable({ project }) {
         };
 
         fetchProjectTickets();
-    }, []);
+    }, [ticketsDataChanged, project]);
 
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
@@ -50,6 +53,7 @@ function ProjectTicketsTable({ project }) {
                 <h3 className="text-1xl font-medium">Tickets</h3>
                 <button
                     type="button"
+                    onClick={() => setIsModalTicketOpen(true)}
                     className="px-3 h-8 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover-bg-blue-700 dark:focus:ring-blue-800"
                 >
                     New ticket
@@ -131,6 +135,16 @@ function ProjectTicketsTable({ project }) {
                 >
                     Next
                 </button>
+                {isModalTicketOpen && (
+                    <CreateTicket
+                        onClose={() => setIsModalTicketOpen(false)}
+                        users={users}
+                        ticketsDataChanged={() => {
+                            setTicketsDataChanged(!ticketsDataChanged);
+                        }}
+                        project_id={project.id}
+                    />
+                )}
             </div>
         </div>
     );

@@ -27,16 +27,18 @@ class TicketController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|between:5,20|unique:tickets',
+            'name' => 'required|string|between:5,20',
             'description' => 'required|string|max:100',
             'type' => ['required', Rule::in(['issue', 'feature', 'bug'])],
             'status' => ['required', Rule::in(['closed', 'new', 'in progress'])],
             'priority' => ['required', Rule::in(['low', 'medium', 'high', 'immediate'])],
-            'time_estimate' => 'required|int|min:1',
+            'time_estimate' => 'required|integer|min:1',
             'project_id' => 'required|exists:projects,id',
-            'author_id' => 'required|exists:users,id',
             'contributors' => 'required|array',
         ]);
+
+        $validatedData['author_id'] = $request->user()->id;
+        $validatedData['author_name'] = $request->user()->name;
 
         $ticket = Ticket::create($validatedData);
 

@@ -9,6 +9,8 @@ function Project() {
     const { id } = useParams();
     const [project, setProject] = useState({});
     const [loading, setLoading] = useState(true);
+    const [users, setUsers] = useState([]);
+    const [usersDataChanged, setUsersDataChanged] = useState(false);
 
     useEffect(() => {
         const fetchProject = async () => {
@@ -24,6 +26,20 @@ function Project() {
         fetchProject();
     }, [id]);
 
+    // Fetch contributors of the project
+    useEffect(() => {
+        const fetchContributors = async () => {
+            try {
+                const data = await API.getProjectContributors(id);
+                setUsers(data);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        };
+
+        fetchContributors();
+    }, [id, usersDataChanged]);
+
     if (loading)
         return (
             <div className="flex items-center justify-center">
@@ -34,10 +50,16 @@ function Project() {
     return (
         <div className="flex p-4 sm:ml-64">
             <div className="w-1/3 pr-4">
-                <ProjectTeamTable project={project} />
+                <ProjectTeamTable
+                    project={project}
+                    users={users}
+                    setUsersDataChanged={() => {
+                        setUsersDataChanged(!usersDataChanged);
+                    }}
+                />
             </div>
             <div className="w-2/3">
-                <ProjectTicketsTable project={project} />
+                <ProjectTicketsTable project={project} users={users} />
             </div>
         </div>
     );

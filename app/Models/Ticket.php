@@ -15,7 +15,10 @@ class Ticket extends Model
         'type',
         'status',
         'priority',
-        'author_id'
+        'author_id',
+        'author_name',
+        'time_estimate',
+        'project_id'
     ];
 
     public function users()

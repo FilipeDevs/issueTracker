@@ -64,6 +64,15 @@ const API = {
         }
     },
 
+    createTicket: async (ticket) => {
+        try {
+            const response = await axiosClient.post("/tickets", ticket);
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
+
     updateProject: async (project) => {
         try {
             const response = await axiosClient.put(

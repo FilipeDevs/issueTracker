@@ -4,13 +4,11 @@ import Loading from "../Loading";
 import AddTeamMember from "../forms/AddTeamMember";
 import { toast } from "react-toastify";
 
-function ProjectTeamTable({ project }) {
-    const [users, setUsers] = useState([]);
+function ProjectTeamTable({ project, users, setUsersDataChanged }) {
     const [availableUsers, setAvailableUsers] = useState([]);
+    const [availableUsersChanged, setAvailableUsersChanged] = useState(false);
     const [isModalMemberOpen, setIsModalMemberOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
-    // Table Refresh
-    const [usersDataChanged, setUsersDataChanged] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -40,29 +38,14 @@ function ProjectTeamTable({ project }) {
             setLoading(true);
             API.removeTeamMember(userId, project.id);
             setLoading(false);
-            setUsersDataChanged(!usersDataChanged);
+            setUsersDataChanged();
+            setAvailableUsersChanged(!availableUsersChanged);
             toast.success("Member removed successfully !");
         } catch (error) {
             console.error("Error removing member from project:", error);
             toast.error("Error removing member from project !");
         }
     };
-
-    // Fetch contributors of the project
-    useEffect(() => {
-        const fetchContributors = async () => {
-            try {
-                setLoading(true);
-                const data = await API.getProjectContributors(project.id);
-                setUsers(data);
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching users:", error);
-            }
-        };
-
-        fetchContributors();
-    }, [usersDataChanged, project.id]);
 
     // Fetch all available users for the project
     useEffect(() => {
@@ -76,7 +59,7 @@ function ProjectTeamTable({ project }) {
         };
 
         fetchAvailableMembers();
-    }, [usersDataChanged, project.id]);
+    }, [project.id, availableUsersChanged]);
 
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
@@ -190,9 +173,10 @@ function ProjectTeamTable({ project }) {
                 <AddTeamMember
                     onClose={() => setIsModalMemberOpen(false)}
                     availableUsers={availableUsers}
-                    usersDataChanged={() =>
-                        setUsersDataChanged(!usersDataChanged)
-                    }
+                    usersDataChanged={() => {
+                        setUsersDataChanged();
+                        setAvailableUsersChanged(!availableUsersChanged);
+                    }}
                     projectId={project.id}
                 />
             )}
