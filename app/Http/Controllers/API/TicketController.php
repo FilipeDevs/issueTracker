@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -34,15 +35,19 @@ class TicketController extends Controller
             'priority' => ['required', Rule::in(['low', 'medium', 'high', 'immediate'])],
             'time_estimate' => 'required|integer|min:1',
             'project_id' => 'required|exists:projects,id',
-            'contributors' => 'required|array',
+            'assignee' => 'required',
         ]);
 
-        $validatedData['author_id'] = $request->user()->id;
+        // Assign the auth user as the author
         $validatedData['author_name'] = $request->user()->name;
 
         $ticket = Ticket::create($validatedData);
 
-        $ticket->users()->attach($request->input('contributors'));
+        // Assign an assignee
+        $assignee = User::find($request->input('assignee'));
+        $ticket->assignee()->associate($assignee);
+        $ticket->assignee_name = $assignee->name;
+        $ticket->save();
 
         return response()->json($ticket, 201);
     }

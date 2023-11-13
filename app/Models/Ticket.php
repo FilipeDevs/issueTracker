@@ -15,15 +15,16 @@ class Ticket extends Model
         'type',
         'status',
         'priority',
-        'author_id',
+        'asignee_id',
+        'assignee_name',
         'author_name',
         'time_estimate',
         'project_id'
     ];
 
-    public function users()
+    public function assignee()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(User::class, 'assignee_id');
     }
 
     public function project()

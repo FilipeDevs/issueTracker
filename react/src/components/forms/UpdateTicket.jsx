@@ -2,13 +2,18 @@ import API from "../../utils/API";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function CreateTicket({ onClose, ticketsDataChanged, users, project_id }) {
-    const handleCreateTicket = async (e) => {
+import React from "react";
+
+function UpdateTicket({ onClose, ticketsDataChanged, users, project_id }) {
+    const handleUpdateTicket = async (e) => {
         e.preventDefault();
         const form = e.target;
         const name = form.name.value;
         const description = form.description.value;
-        const assignee = form.contributors.value;
+        const contributors = Array.from(
+            form.contributors.selectedOptions,
+            (option) => option.value
+        );
         const time_estimate = form.timeEstimate.value;
         const type = form.type.value;
         const priority = form.priority.value;
@@ -17,7 +22,7 @@ function CreateTicket({ onClose, ticketsDataChanged, users, project_id }) {
         const ticket = {
             name,
             description,
-            assignee,
+            contributors,
             time_estimate,
             type,
             priority,
@@ -73,7 +78,7 @@ function CreateTicket({ onClose, ticketsDataChanged, users, project_id }) {
                         </h3>
                         <form
                             className="space-y-6"
-                            onSubmit={handleCreateTicket}
+                            onSubmit={handleUpdateTicket}
                         >
                             <div>
                                 <label
@@ -110,9 +115,10 @@ function CreateTicket({ onClose, ticketsDataChanged, users, project_id }) {
                                     htmlFor="contributors"
                                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                 >
-                                    Assignee
+                                    Contributors
                                 </label>
                                 <select
+                                    multiple
                                     name="contributors"
                                     id="contributors"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-600 dark:border-gray-500 dark:text-white"
@@ -219,4 +225,4 @@ function CreateTicket({ onClose, ticketsDataChanged, users, project_id }) {
     );
 }
 
-export default CreateTicket;
+export default UpdateTicket;

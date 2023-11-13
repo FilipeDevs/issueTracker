@@ -24,17 +24,18 @@ class TicketTableSeeder extends Seeder
 
                 // Create tickets for each project associated with the user
                 $tickets = Ticket::factory(2)->create([
-                    'author_id' => $user->id,
                     'author_name' => $user->name,
                     'project_id' => $project->id,
                 ]);
 
-                // Associate other users with the created tickets who are also associated with the same project
+                // Associate an assignee with the created tickets who are also associated with the same project
                 $otherUsers = $users->except($user->id)->whereIn('id', $projectUserIds);
                 $tickets->each(function ($ticket) use ($otherUsers) {
                     if ($otherUsers->count() > 0) {
-                        $usersToAttach = $otherUsers->random(1);
-                        $ticket->users()->attach($usersToAttach);
+                        $usersAssignee = $otherUsers->random(1)->first();
+                        $ticket->assignee()->associate($usersAssignee);
+                        $ticket->asignee_name = $usersAssignee->name;
+                        $ticket->save();
                     }
                 });
             });

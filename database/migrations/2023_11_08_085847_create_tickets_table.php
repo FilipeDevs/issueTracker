@@ -18,13 +18,14 @@ return new class extends Migration {
             $table->enum('status', ['closed', 'new', 'in progress'])->default('new');
             $table->enum('priority', ['low', 'medium', 'high', 'immediate'])->default('medium');
             $table->string('author_name');
+            $table->string('assignee_name')->nullable(true);
             $table->integer('time_estimate');
             $table->unsignedBigInteger('project_id');
-            $table->unsignedBigInteger('author_id');
+            $table->unsignedBigInteger('assignee_id')->nullable(true);
             $table->timestamps();
 
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
-            $table->foreign('author_id')->references('id')->on('users');
+            $table->foreign('assignee_id')->references('id')->on('users');
         });
     }
 
