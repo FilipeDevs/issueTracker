@@ -7,6 +7,7 @@ import Dashboard from "./views/Dashboard";
 import Tickets from "./views/Tickets";
 import Project from "./views/Project";
 import NotFound from "./views/NotFound";
+import Ticket from "./views/Ticket";
 
 const router = createBrowserRouter([
     {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
             {
                 path: "/project/:id",
                 element: <Project />,
+            },
+            {
+                path: "/ticket/:id",
+                element: <Ticket />,
             },
             {
                 path: "/tickets",

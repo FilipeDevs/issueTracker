@@ -85,6 +85,18 @@ const API = {
         }
     },
 
+    updateTicket: async (ticket) => {
+        try {
+            const response = await axiosClient.put(
+                `/tickets/${ticket.id}`,
+                ticket
+            );
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
+
     addTeamMember: async (contributors, projectId) => {
         try {
             const response = await axiosClient.put(
@@ -144,7 +156,18 @@ const API = {
 
     getProjectTickets: async (project_id) => {
         try {
-            const response = await axiosClient.get(`/tickets/${project_id}`);
+            const response = await axiosClient.get(
+                `/tickets/project/${project_id}`
+            );
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
+
+    getTicket: async (ticket_id) => {
+        try {
+            const response = await axiosClient.get(`/tickets/${ticket_id}`);
             return response.data;
         } catch (error) {
             return await Promise.reject(error);

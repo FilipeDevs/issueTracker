@@ -30,6 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::put('/projects/removeMember/{id}', [ProjectController::class, 'removeTeamMember']);
 
+    Route::get('/tickets/project/{project_id}', [TicketController::class, 'getProjectTickets']);
+
 });
 
 Route::post('/register', [AuthController::class, 'register']);

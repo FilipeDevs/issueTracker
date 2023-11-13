@@ -11,18 +11,17 @@ use Illuminate\Validation\Rule;
 class TicketController extends Controller
 {
     // Get all the tickets of a specific project
-    public function show(Request $request, int $project_id)
+    public function getProjectTickets(Request $request, int $project_id)
     {
         $tickets = Ticket::where("project_id", $project_id)->get();
         return response()->json($tickets);
     }
 
-    // Get all the tickets from a specific user
-    public function index(Request $request)
+    // Get a specific ticket
+    public function show($id)
     {
-        $user = $request->user();
-        $tickets = $user->tickets;
-        return response()->json($tickets);
+        $ticket = Ticket::find($id);
+        return response()->json($ticket);
     }
 
     public function store(Request $request)
@@ -61,7 +60,7 @@ class TicketController extends Controller
             'status' => ['required', Rule::in(['closed', 'new', 'in progress'])],
             'priority' => ['required', Rule::in(['low', 'medium', 'high', 'immediate'])],
             'time_estimate' => 'required|int|min:1',
-            'contributors' => 'required|array',
+            'assignee' => 'required',
         ]);
 
         $ticket = Ticket::find($id);
@@ -72,10 +71,11 @@ class TicketController extends Controller
 
         $ticket->update($validatedData);
 
-        // Sync contributors if provided
-        if ($request->has('contributors')) {
-            $ticket->users()->sync($request->input('contributors'));
-        }
+        // Assign an assignee
+        $assignee = User::find($request->input('assignee'));
+        $ticket->assignee()->associate($assignee);
+        $ticket->assignee_name = $assignee->name;
+        $ticket->save();
 
         return response()->json($ticket);
     }

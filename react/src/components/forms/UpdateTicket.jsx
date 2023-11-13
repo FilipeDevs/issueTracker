@@ -1,47 +1,46 @@
+import { useState } from "react";
 import API from "../../utils/API";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import React from "react";
+function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
+    const [formData, setFormData] = useState({
+        name: ticket.name,
+        description: ticket.description,
+        assignee: ticket.assignee,
+        time_estimate: ticket.time_estimate,
+        type: ticket.type,
+        priority: ticket.priority,
+        status: ticket.status,
+    });
 
-function UpdateTicket({ onClose, ticketsDataChanged, users, project_id }) {
     const handleUpdateTicket = async (e) => {
         e.preventDefault();
-        const form = e.target;
-        const name = form.name.value;
-        const description = form.description.value;
-        const contributors = Array.from(
-            form.contributors.selectedOptions,
-            (option) => option.value
-        );
-        const time_estimate = form.timeEstimate.value;
-        const type = form.type.value;
-        const priority = form.priority.value;
-        const status = form.status.value;
 
         const ticket = {
-            name,
-            description,
-            contributors,
-            time_estimate,
-            type,
-            priority,
-            status,
-            project_id,
+            ...formData,
         };
 
         try {
-            await API.createTicket(ticket);
-            ticketsDataChanged();
+            await API.updateTicket(ticket);
+            ticketDataChanged();
             onClose();
-            toast.success("New ticket created!");
+            toast.success("Ticket updated successfully !");
         } catch (error) {
             console.error(
-                "Error creating new ticket!",
+                "Error updating ticket!",
                 error.response.data.message
             );
             toast.error(error.response.data.message);
         }
+    };
+
+    const handleFormChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
     };
 
     return (
@@ -74,7 +73,7 @@ function UpdateTicket({ onClose, ticketsDataChanged, users, project_id }) {
                     </button>
                     <div className="px-6 py-6 lg:px-8">
                         <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-                            Create a new ticket
+                            Update ticket
                         </h3>
                         <form
                             className="space-y-6"
@@ -88,6 +87,8 @@ function UpdateTicket({ onClose, ticketsDataChanged, users, project_id }) {
                                     Ticket Name
                                 </label>
                                 <input
+                                    value={ticket.name}
+                                    onChange={handleFormChange}
                                     type="text"
                                     name="name"
                                     id="name"
@@ -103,6 +104,8 @@ function UpdateTicket({ onClose, ticketsDataChanged, users, project_id }) {
                                     Descritpion
                                 </label>
                                 <textarea
+                                    value={ticket.description}
+                                    onChange={handleFormChange}
                                     type="text"
                                     name="description"
                                     id="description"
@@ -118,7 +121,8 @@ function UpdateTicket({ onClose, ticketsDataChanged, users, project_id }) {
                                     Contributors
                                 </label>
                                 <select
-                                    multiple
+                                    value={ticket.assignee_id}
+                                    onChange={handleFormChange}
                                     name="contributors"
                                     id="contributors"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-600 dark:border-gray-500 dark:text-white"
@@ -140,6 +144,8 @@ function UpdateTicket({ onClose, ticketsDataChanged, users, project_id }) {
                                         Time Estimate (in hours)
                                     </label>
                                     <input
+                                        value={ticket.time_estimate}
+                                        onChange={handleFormChange}
                                         type="number"
                                         name="timeEstimate"
                                         id="timeEstimate"
@@ -156,6 +162,8 @@ function UpdateTicket({ onClose, ticketsDataChanged, users, project_id }) {
                                         Type
                                     </label>
                                     <select
+                                        value={ticket.type}
+                                        onChange={handleFormChange}
                                         name="type"
                                         id="type"
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-600 dark:border-gray-500 dark:text-white"
@@ -175,6 +183,8 @@ function UpdateTicket({ onClose, ticketsDataChanged, users, project_id }) {
                                         Priority
                                     </label>
                                     <select
+                                        value={ticket.priority}
+                                        onChange={handleFormChange}
                                         name="priority"
                                         id="priority"
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-600 dark:border-gray-500 dark:text-white"
@@ -197,6 +207,8 @@ function UpdateTicket({ onClose, ticketsDataChanged, users, project_id }) {
                                         Status
                                     </label>
                                     <select
+                                        value={ticket.status}
+                                        onChange={handleFormChange}
                                         name="status"
                                         id="status"
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-600 dark:border-gray-500 dark:text-white"
@@ -212,10 +224,17 @@ function UpdateTicket({ onClose, ticketsDataChanged, users, project_id }) {
                             </div>
 
                             <button
+                                onClick={handleUpdateTicket}
                                 type="submit"
                                 className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             >
-                                Create
+                                Update
+                            </button>
+                            <button
+                                type="button"
+                                className="w-full text-white bg-red-700 hover:bg-red-800 focus-ring-4 focus-outline-none focus-ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark-bg-red-600 dark-hover-bg-red-700 dark-focus-ring-red-800"
+                            >
+                                Delete
                             </button>
                         </form>
                     </div>

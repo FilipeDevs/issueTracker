@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../../utils/API";
 import Loading from "../Loading";
 import CreateTicket from "../forms/CreateTicket";
+import { Link } from "react-router-dom";
 
 function ProjectTicketsTable({ project, users }) {
     const [tickets, setTickets] = useState([]);
@@ -11,7 +12,7 @@ function ProjectTicketsTable({ project, users }) {
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(6);
+    const [itemsPerPage] = useState(5);
 
     // Pagination Logic
     const indexOfLastTicket = currentPage * itemsPerPage;
@@ -91,7 +92,9 @@ function ProjectTicketsTable({ project, users }) {
                                     scope="row"
                                     className="px-6 py-4 font-medium text-blue-700 whitespace-nowrap dark:text-white"
                                 >
-                                    {ticket.name}
+                                    <Link to={`/ticket/${ticket.id}`}>
+                                        {ticket.name}
+                                    </Link>
                                 </th>
                                 <td className="px-6 py-4">
                                     <p>{ticket.description}</p>

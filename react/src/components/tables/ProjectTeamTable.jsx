@@ -12,7 +12,7 @@ function ProjectTeamTable({ project, users, setUsersDataChanged }) {
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(3);
+    const [itemsPerPage] = useState(5);
 
     // Pagination Logic
     const indexOfLastUser = currentPage * itemsPerPage;
