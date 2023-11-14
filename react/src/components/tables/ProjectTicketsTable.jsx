@@ -92,7 +92,9 @@ function ProjectTicketsTable({ project, users }) {
                                     scope="row"
                                     className="px-6 py-4 font-medium text-blue-700 whitespace-nowrap dark:text-white"
                                 >
-                                    <Link to={`/ticket/${ticket.id}`}>
+                                    <Link
+                                        to={`/project/${project.id}/ticket/${ticket.id}`}
+                                    >
                                         {ticket.name}
                                     </Link>
                                 </th>

@@ -4,7 +4,7 @@ import UpdateTicket from "../forms/UpdateTicket";
 import API from "../../utils/API";
 import Loading from "../Loading";
 
-function TicketInfo({ id }) {
+function TicketInfo({ id, projectId, redirectToProject }) {
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
     const [ticketDataChanged, setTicketDataChanged] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -16,9 +16,7 @@ function TicketInfo({ id }) {
             try {
                 setLoading(true);
                 const ticketData = await API.getTicket(id);
-                const data = await API.getProjectContributors(
-                    ticket.project_id
-                );
+                const data = await API.getProjectContributors(projectId);
                 setUsers(data);
                 setTicket(ticketData);
                 setLoading(false);
@@ -27,7 +25,7 @@ function TicketInfo({ id }) {
             }
         };
         fetchTicket();
-    }, [id, ticketDataChanged]);
+    }, [id, projectId, ticketDataChanged]);
 
     if (loading)
         return (
@@ -100,9 +98,14 @@ function TicketInfo({ id }) {
                     <p>{ticket.priority}</p>
                 </div>
                 <div className="mb-4">
-                    <label className="font-bold">Project:</label>
+                    <label className="font-bold">Time estimate:</label>
+                    <p>{ticket.time_estimate} hours</p>
+                </div>
+                <div className="mb-4">
                     <Link to={`/project/${ticket.project_id}`}>
-                        <p>{ticket.project_id}</p>
+                        <a className="font-bold underline">
+                            Associated Project
+                        </a>
                     </Link>
                 </div>
                 <div className="mb-4">
@@ -122,6 +125,7 @@ function TicketInfo({ id }) {
                         setTicketDataChanged(!ticketDataChanged)
                     }
                     users={users}
+                    redirectToProject={redirectToProject}
                 />
             )}
         </div>

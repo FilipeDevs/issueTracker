@@ -12,7 +12,9 @@ function Dashboard() {
 
     return (
         <div className="p-4 sm:ml-64">
-            <p>Hello {user}</p>
+            <div className="text-center text-lg font-semibold bg-white rounded p-6 shadow-lg dark:bg-gray-900 mb-5">
+                Welcome, {user} ☕
+            </div>
             <DashboardTable />
         </div>
     );

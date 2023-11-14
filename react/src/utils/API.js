@@ -132,6 +132,15 @@ const API = {
         }
     },
 
+    deleteTicket: async (ticket) => {
+        try {
+            const response = await axiosClient.delete(`/tickets/${ticket.id}`);
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
+
     getProjectContributors: async (project_id) => {
         try {
             const response = await axiosClient.get(

@@ -6,22 +6,14 @@ function CreateTicket({ onClose, ticketsDataChanged, users, project_id }) {
     const handleCreateTicket = async (e) => {
         e.preventDefault();
         const form = e.target;
-        const name = form.name.value;
-        const description = form.description.value;
-        const assignee = form.contributors.value;
-        const time_estimate = form.timeEstimate.value;
-        const type = form.type.value;
-        const priority = form.priority.value;
-        const status = form.status.value;
-
         const ticket = {
-            name,
-            description,
-            assignee,
-            time_estimate,
-            type,
-            priority,
-            status,
+            name: form.name.value,
+            description: form.description.value,
+            assignee: form.contributors.value,
+            time_estimate: form.timeEstimate.value,
+            type: form.type.value,
+            priority: form.priority.value,
+            status: form.status.value,
             project_id,
         };
 
@@ -137,6 +129,7 @@ function CreateTicket({ onClose, ticketsDataChanged, users, project_id }) {
                                         type="number"
                                         name="timeEstimate"
                                         id="timeEstimate"
+                                        min="1"
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                                         required
                                     />

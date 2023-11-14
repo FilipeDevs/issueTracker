@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { redirect, useParams } from "react-router-dom";
 import ProjectTeamTable from "../components/tables/ProjectTeamTable";
 import ProjectTicketsTable from "../components/tables/ProjectTicketsTable";
 import { useEffect, useState } from "react";
@@ -48,18 +48,28 @@ function Project() {
         );
 
     return (
-        <div className="flex p-4 sm:ml-64">
-            <div className="w-1/3 pr-4">
-                <ProjectTeamTable
-                    project={project}
-                    users={users}
-                    setUsersDataChanged={() => {
-                        setUsersDataChanged(!usersDataChanged);
-                    }}
-                />
+        <div className="p-4 sm:ml-64">
+            <div className="mb-2 p-4 text-center shadow-md sm:rounded-lg bg-white">
+                <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                    {project.name}
+                </h2>
+                <p className="text-lg text-gray-600 dark:text-gray-400">
+                    {project.description}
+                </p>
             </div>
-            <div className="w-2/3">
-                <ProjectTicketsTable project={project} users={users} />
+            <div className="flex">
+                <div className="w-1/3 pr-4">
+                    <ProjectTeamTable
+                        project={project}
+                        users={users}
+                        setUsersDataChanged={() => {
+                            setUsersDataChanged(!usersDataChanged);
+                        }}
+                    />
+                </div>
+                <div className="w-2/3">
+                    <ProjectTicketsTable project={project} users={users} />
+                </div>
             </div>
         </div>
     );

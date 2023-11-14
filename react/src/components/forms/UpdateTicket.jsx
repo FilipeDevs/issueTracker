@@ -2,12 +2,14 @@ import { useState } from "react";
 import API from "../../utils/API";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { redirect } from "react-router-dom";
 
 function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
     const [formData, setFormData] = useState({
+        id: ticket.id,
         name: ticket.name,
         description: ticket.description,
-        assignee: ticket.assignee,
+        assignee: ticket.assignee_id,
         time_estimate: ticket.time_estimate,
         type: ticket.type,
         priority: ticket.priority,
@@ -15,8 +17,6 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
     });
 
     const handleUpdateTicket = async (e) => {
-        e.preventDefault();
-
         const ticket = {
             ...formData,
         };
@@ -24,8 +24,8 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
         try {
             await API.updateTicket(ticket);
             ticketDataChanged();
-            onClose();
             toast.success("Ticket updated successfully !");
+            onClose();
         } catch (error) {
             console.error(
                 "Error updating ticket!",
@@ -35,12 +35,27 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
         }
     };
 
+    const handleDeleteTicket = async (e) => {
+        try {
+            await API.deleteTicket(ticket);
+            toast.success("Ticket was deleted !");
+            onClose();
+            redirect("/dashboard");
+        } catch (error) {
+            console.error(
+                "Error deleting the ticket:",
+                error.response.data.message
+            );
+            toast.error("Error deleting the ticket !");
+        }
+    };
+
     const handleFormChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
+        setFormData((prevFormData) => ({
+            ...prevFormData,
             [name]: value,
-        });
+        }));
     };
 
     return (
@@ -87,7 +102,7 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
                                     Ticket Name
                                 </label>
                                 <input
-                                    value={ticket.name}
+                                    value={formData.name}
                                     onChange={handleFormChange}
                                     type="text"
                                     name="name"
@@ -104,7 +119,7 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
                                     Descritpion
                                 </label>
                                 <textarea
-                                    value={ticket.description}
+                                    value={formData.description}
                                     onChange={handleFormChange}
                                     type="text"
                                     name="description"
@@ -118,13 +133,13 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
                                     htmlFor="contributors"
                                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                 >
-                                    Contributors
+                                    Assignee
                                 </label>
                                 <select
-                                    value={ticket.assignee_id}
+                                    value={formData.assignee}
                                     onChange={handleFormChange}
-                                    name="contributors"
-                                    id="contributors"
+                                    name="assignee"
+                                    id="assignee"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full dark:bg-gray-600 dark:border-gray-500 dark:text-white"
                                     required
                                 >
@@ -144,11 +159,12 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
                                         Time Estimate (in hours)
                                     </label>
                                     <input
-                                        value={ticket.time_estimate}
+                                        value={formData.time_estimate}
                                         onChange={handleFormChange}
                                         type="number"
-                                        name="timeEstimate"
-                                        id="timeEstimate"
+                                        name="time_estimate"
+                                        min="1"
+                                        id="time_estimate"
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                                         required
                                     />
@@ -162,7 +178,7 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
                                         Type
                                     </label>
                                     <select
-                                        value={ticket.type}
+                                        value={formData.type}
                                         onChange={handleFormChange}
                                         name="type"
                                         id="type"
@@ -183,7 +199,7 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
                                         Priority
                                     </label>
                                     <select
-                                        value={ticket.priority}
+                                        value={formData.priority}
                                         onChange={handleFormChange}
                                         name="priority"
                                         id="priority"
@@ -207,7 +223,7 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
                                         Status
                                     </label>
                                     <select
-                                        value={ticket.status}
+                                        value={formData.status}
                                         onChange={handleFormChange}
                                         name="status"
                                         id="status"
@@ -224,13 +240,13 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
                             </div>
 
                             <button
-                                onClick={handleUpdateTicket}
                                 type="submit"
                                 className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             >
                                 Update
                             </button>
                             <button
+                                onClick={handleDeleteTicket}
                                 type="button"
                                 className="w-full text-white bg-red-700 hover:bg-red-800 focus-ring-4 focus-outline-none focus-ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark-bg-red-600 dark-hover-bg-red-700 dark-focus-ring-red-800"
                             >
