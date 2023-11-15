@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import API from "../../utils/API";
 import Loading from "../Loading";
 import CreateTicket from "../forms/CreateTicket";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function ProjectTicketsTable({ project, users }) {
+    let navigate = useNavigate();
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isModalTicketOpen, setIsModalTicketOpen] = useState(false);
@@ -70,9 +71,8 @@ function ProjectTicketsTable({ project, users }) {
                             Description
                         </th>
                         <th scope="col" className="px-6 py-2">
-                            Ticket Author
+                            Author
                         </th>
-                        <th scope="col" className="px-2 py-2"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -85,6 +85,7 @@ function ProjectTicketsTable({ project, users }) {
                     ) : (
                         currentTickets.map((ticket) => (
                             <tr
+                                onClick={() => {navigate(`/project/${project.id}/ticket/${ticket.id}`)}}
                                 key={ticket.id}
                                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-100 dark:hover-bg-gray-600 cursor-pointer"
                             >
@@ -92,24 +93,13 @@ function ProjectTicketsTable({ project, users }) {
                                     scope="row"
                                     className="px-6 py-4 font-medium text-blue-700 whitespace-nowrap dark:text-white"
                                 >
-                                    <Link
-                                        to={`/project/${project.id}/ticket/${ticket.id}`}
-                                    >
                                         {ticket.name}
-                                    </Link>
                                 </th>
                                 <td className="px-6 py-4">
                                     <p>{ticket.description}</p>
                                 </td>
                                 <td className="px-6 py-4">
                                     <p>{ticket.author_name}</p>
-                                </td>
-                                <td className="px-1 py-1">
-                                    <button>
-                                        <p className="text-lg font-medium text-gray-900 dark:text-white">
-                                            ...
-                                        </p>
-                                    </button>
                                 </td>
                             </tr>
                         ))

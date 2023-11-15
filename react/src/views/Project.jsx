@@ -58,7 +58,7 @@ function Project() {
                 </p>
             </div>
             <div className="flex">
-                <div className="w-1/3 pr-4">
+                <div className="w-1/3 pr-4 md:w-1/2">
                     <ProjectTeamTable
                         project={project}
                         users={users}

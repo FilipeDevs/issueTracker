@@ -19,14 +19,15 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
     });
 
     const handleUpdateTicket = async (e) => {
+        e.preventDefault();
         const ticket = {
             ...formData,
         };
 
         try {
             await API.updateTicket(ticket);
-            ticketDataChanged();
             toast.success("Ticket updated successfully !");
+            ticketDataChanged();
             onClose();
         } catch (error) {
             console.error(
@@ -37,8 +38,7 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
         }
     };
 
-    const handleDeleteTicket = async () => {
-
+    const handleDeleteTicket = async (e) => {
         try {
             await API.deleteTicket(ticket);
             toast.success("Ticket was deleted !");
@@ -95,7 +95,6 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
                         </h3>
                         <form
                             className="space-y-6"
-                            onSubmit={handleUpdateTicket}
                         >
                             <div>
                                 <label
@@ -243,7 +242,8 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
                             </div>
 
                             <button
-                                type="submit"
+                                type="button"
+                                onClick={handleUpdateTicket}
                                 className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             >
                                 Update
