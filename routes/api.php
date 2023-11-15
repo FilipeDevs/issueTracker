@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CommentControler;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\UserController;
@@ -19,6 +20,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('users', UserController::class);
 
     Route::resource('tickets', TicketController::class);
+
+    Route::resource('comments', CommentControler::class);
 
     Route::get('/tickets/{user}', [TicketController::class, 'indexUser']);
 
