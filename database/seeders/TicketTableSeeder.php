@@ -34,7 +34,7 @@ class TicketTableSeeder extends Seeder
                     if ($otherUsers->count() > 0) {
                         $usersAssignee = $otherUsers->random(1)->first();
                         $ticket->assignee()->associate($usersAssignee);
-                        $ticket->asignee_name = $usersAssignee->name;
+                        $ticket->assignee_name = $usersAssignee->name;
                         $ticket->save();
                     }
                 });

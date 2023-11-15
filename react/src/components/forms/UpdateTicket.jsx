@@ -2,9 +2,11 @@ import { useState } from "react";
 import API from "../../utils/API";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
+    let navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         id: ticket.id,
         name: ticket.name,
@@ -35,12 +37,13 @@ function UpdateTicket({ ticket, onClose, ticketDataChanged, users }) {
         }
     };
 
-    const handleDeleteTicket = async (e) => {
+    const handleDeleteTicket = async () => {
+
         try {
             await API.deleteTicket(ticket);
             toast.success("Ticket was deleted !");
+            navigate(`/project/${ticket.project_id}`);
             onClose();
-            redirect("/dashboard");
         } catch (error) {
             console.error(
                 "Error deleting the ticket:",

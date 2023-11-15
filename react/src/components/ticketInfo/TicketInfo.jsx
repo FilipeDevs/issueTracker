@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import UpdateTicket from "../forms/UpdateTicket";
 import API from "../../utils/API";
 import Loading from "../Loading";
 
-function TicketInfo({ id, projectId, redirectToProject }) {
+function TicketInfo({ id, projectId }) {
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
     const [ticketDataChanged, setTicketDataChanged] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -125,7 +125,7 @@ function TicketInfo({ id, projectId, redirectToProject }) {
                         setTicketDataChanged(!ticketDataChanged)
                     }
                     users={users}
-                    redirectToProject={redirectToProject}
+                    redirectToProject={() => {setIsRedirect(true)}}
                 />
             )}
         </div>
