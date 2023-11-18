@@ -52,7 +52,7 @@ function TicketInfo({ id, projectId }) {
             <div className="flex-1 pr-8">
                 <h1 className="text-2xl font-bold mb-4 mr-2">{ticket.name}</h1>
                 <p className="text-gray-600">{ticket.description}</p>
-                <Comments />
+                <Comments ticket_id={id} formatTimestamp={formatTimestamp} />
             </div>
 
             <div className="w-1/4 bg-gray-100 p-4 rounded h-screen">
@@ -103,8 +103,11 @@ function TicketInfo({ id, projectId }) {
                     <p>{ticket.time_estimate} hours</p>
                 </div>
                 <div className="mb-4">
-                    <Link className="font-bold underline" to={`/project/${ticket.project_id}`}>
-                            Associated Project
+                    <Link
+                        className="font-bold underline"
+                        to={`/project/${ticket.project_id}`}
+                    >
+                        Associated Project
                     </Link>
                 </div>
                 <div className="mb-4">
@@ -124,7 +127,6 @@ function TicketInfo({ id, projectId }) {
                         setTicketDataChanged(!ticketDataChanged)
                     }
                     users={users}
-                    redirectToProject={() => {setIsRedirect(true)}}
                 />
             )}
         </div>

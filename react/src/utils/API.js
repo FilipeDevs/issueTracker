@@ -182,6 +182,24 @@ const API = {
             return await Promise.reject(error);
         }
     },
+
+    getTicketComments: async (ticket_id) => {
+        try {
+            const response = await axiosClient.get(`/comments/${ticket_id}`);
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
+
+    postCommentOnTicket: async (comment) => {
+        try {
+            const response = await axiosClient.post(`/comments`, comment);
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
 };
 
 export default API;

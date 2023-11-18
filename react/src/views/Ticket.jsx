@@ -5,10 +5,7 @@ function Ticket() {
     const { project, id } = useParams();
     return (
         <div className="p-4 sm:ml-64">
-            <TicketInfo
-                id={id}
-                projectId={project}
-            />
+            <TicketInfo id={id} projectId={project} />
         </div>
     );
 }

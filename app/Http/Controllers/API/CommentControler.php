@@ -9,23 +9,33 @@ use Illuminate\Http\Request;
 class CommentControler extends Controller
 {
     // Get all the comments of specific ticket
-    public function show(Request $request, int $ticketId) {
+    public function show(Request $request, int $ticketId)
+    {
         $comments = Comment::where("ticket_id", $ticketId)->get();
         return response()->json($comments);
     }
 
     // Delete a specific comment
-    public function destroy(Request $request, int $id){
+    public function destroy(Request $request, int $id)
+    {
+        $comment = Comment::find($id);
+
+        // Only the author can delete his comment
+        if ($request->input("author_id") != $request->user()->id) {
+            abort(401);
+        }
+
         Comment::destroy($id);
         return response()->json(null, 204);
     }
 
     // Update a specific comment
-    public function update(Request $request, int $id) {
+    public function update(Request $request, int $id)
+    {
         $comment = Comment::find($id);
 
         // Only the author can update his comment
-        if($request->input("author_id" ) != $request->user()->id) {
+        if ($request->input("author_id") != $request->user()->id) {
             abort(401);
         }
 
