@@ -15,13 +15,29 @@ class CommentControler extends Controller
         return response()->json($comments);
     }
 
+    // Store comment
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'comment' => 'required|string',
+            'ticket_id' => 'required|integer',
+        ]);
+
+        $validatedData['author_id'] = $request->user()->id;
+        $validatedData['author_name'] = $request->user()->name;
+
+        $comment = Comment::create($validatedData);
+
+        return response()->json($comment, 201);
+    }
+
     // Delete a specific comment
     public function destroy(Request $request, int $id)
     {
         $comment = Comment::find($id);
 
         // Only the author can delete his comment
-        if ($request->input("author_id") != $request->user()->id) {
+        if ($comment->author_id != $request->user()->id) {
             abort(401);
         }
 
@@ -35,7 +51,7 @@ class CommentControler extends Controller
         $comment = Comment::find($id);
 
         // Only the author can update his comment
-        if ($request->input("author_id") != $request->user()->id) {
+        if ($comment->author_id != $request->user()->id) {
             abort(401);
         }
 
