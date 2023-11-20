@@ -29,7 +29,10 @@ function Register() {
 
         try {
             const data = await API.register(payload);
-            setUser(data.user.name);
+            setUser({
+                name: data.user.name,
+                id: data.user.id,
+            });
             setToken(data.token);
         } catch (errors) {
             if (errors.response && errors.response.status === 422) {

@@ -1,20 +1,23 @@
 import { createContext, useContext, useState } from "react";
 
 const StateContext = createContext({
-    user: null,
+    user: {},
     token: null,
     setUser: () => {},
     setToken: () => {},
 });
 
 export const ContextProvider = ({ children }) => {
-    const [user, _setUser] = useState(localStorage.getItem("USER"));
+    const [user, _setUser] = useState(() => {
+        const storedUser = localStorage.getItem("USER");
+        return storedUser ? JSON.parse(storedUser) : {};
+    });
     const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
 
     const setUser = (user) => {
         _setUser(user);
         if (user) {
-            localStorage.setItem("USER", user);
+            localStorage.setItem("USER", JSON.stringify(user));
         } else {
             localStorage.removeItem("USER");
         }

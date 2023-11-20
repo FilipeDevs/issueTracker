@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CommentControler extends Controller
 {
@@ -46,8 +47,9 @@ class CommentControler extends Controller
     }
 
     // Update a specific comment
-    public function update(Request $request, int $id)
+    public function update(Request $request, $id)
     {
+        Log::info($id);
         $comment = Comment::find($id);
 
         // Only the author can update his comment
@@ -55,7 +57,11 @@ class CommentControler extends Controller
             abort(401);
         }
 
-        $comment->update($request->all());
+        $request->validate([
+            'comment' => 'required|string|min:1',
+        ]);
+
+        $comment->update(['comment' => $request->input('comment')]);
         return response()->json($comment);
     }
 }

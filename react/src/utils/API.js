@@ -1,3 +1,4 @@
+import axios from "axios";
 import axiosClient from "../clients/axios-client";
 
 const API = {
@@ -195,6 +196,19 @@ const API = {
     postCommentOnTicket: async (comment) => {
         try {
             const response = await axiosClient.post(`/comments`, comment);
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
+
+    updateCommentOnTicket: async (comment) => {
+        try {
+            console.log(comment);
+            const response = await axiosClient.put(
+                `/comments/${comment.id}`,
+                comment
+            );
             return response.data;
         } catch (error) {
             return await Promise.reject(error);
