@@ -1,4 +1,3 @@
-import axios from "axios";
 import axiosClient from "../clients/axios-client";
 
 const API = {
@@ -32,6 +31,15 @@ const API = {
     getProjects: async () => {
         try {
             const response = await axiosClient.get("/projects");
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
+
+    getAssignedProjects: async (userId) => {
+        try {
+            const response = await axiosClient.get(`/projects/user/${userId}`);
             return response.data;
         } catch (error) {
             return await Promise.reject(error);

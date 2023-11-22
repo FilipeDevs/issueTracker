@@ -31,6 +31,7 @@ function Register() {
             const data = await API.register(payload);
             setUser({
                 name: data.user.name,
+                role: data.user.roles[0].name,
                 id: data.user.id,
             });
             setToken(data.token);

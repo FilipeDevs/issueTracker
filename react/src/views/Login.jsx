@@ -27,6 +27,7 @@ function Login() {
             const data = await API.login(payload);
             setUser({
                 name: data.user.name,
+                role: data.user.roles[0].name,
                 id: data.user.id,
             });
             setToken(data.token);

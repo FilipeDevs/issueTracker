@@ -8,6 +8,7 @@ use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -23,8 +24,9 @@ class AuthController extends Controller
         ]);
 
         $token = $user->createToken('main')->plainTextToken;
-
-        return response(compact('user', 'token'));
+        $role = $user->assignRole('developer'); // By default a new account has a role of developer
+        $user->roles;
+        return response(compact('user', 'token', 'role'));
     }
 
     public function login(LoginRequest $request)
@@ -39,6 +41,7 @@ class AuthController extends Controller
         /** @var \App\Models\User $user*/
         $user = Auth::user();
         $token = $user->createToken('main')->plainTextToken;
+        $user->roles;
 
         return response(compact('user', 'token'));
     }

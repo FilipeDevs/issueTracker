@@ -4,10 +4,25 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
+
+    public function userProjects($userId)
+    {
+        $user = User::find($userId);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $projects = $user->projects()->with('users')->get();
+
+        return response()->json($projects);
+    }
+
     public function index(Request $request)
     {
         $projects = Project::with('users')->get();

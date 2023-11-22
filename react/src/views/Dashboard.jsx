@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import DashboardTable from "../components/tables/DashboardTable";
+import DeveloperDashboardTable from "../components/tables/DeveloperDashboardTable";
 
 function Dashboard() {
     const { user, token } = useStateContext();
@@ -15,7 +16,11 @@ function Dashboard() {
             <div className="text-center text-lg font-semibold bg-white rounded p-6 shadow-lg dark:bg-gray-900 mb-5">
                 Welcome, {user.name} ☕
             </div>
-            <DashboardTable />
+            {user.role == "admin" || user.role == "admin" ? (
+                <DashboardTable />
+            ) : (
+                <DeveloperDashboardTable />
+            )}
         </div>
     );
 }
