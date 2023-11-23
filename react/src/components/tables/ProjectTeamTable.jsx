@@ -3,8 +3,10 @@ import API from "../../utils/API";
 import Loading from "../Loading";
 import AddTeamMember from "../forms/AddTeamMember";
 import { toast } from "react-toastify";
+import { useStateContext } from "../../contexts/ContextProvider";
 
 function ProjectTeamTable({ project, users, setUsersDataChanged }) {
+    const { user } = useStateContext();
     const [availableUsers, setAvailableUsers] = useState([]);
     const [availableUsersChanged, setAvailableUsersChanged] = useState(false);
     const [isModalMemberOpen, setIsModalMemberOpen] = useState(false);
@@ -65,13 +67,15 @@ function ProjectTeamTable({ project, users, setUsersDataChanged }) {
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
             <div className="flex flex-grow p-5 bg-white dark:bg-gray-900 items-center justify-between">
                 <h3 className="text-1xl font-medium">Team</h3>
-                <button
-                    type="button"
-                    onClick={() => setIsModalMemberOpen(true)}
-                    className="px-3 h-8 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover-bg-blue-700 dark:focus:ring-blue-800"
-                >
-                    New member
-                </button>
+                {user.role != "developer" && (
+                    <button
+                        type="button"
+                        onClick={() => setIsModalMemberOpen(true)}
+                        className="px-3 h-8 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover-bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                        New member
+                    </button>
+                )}
             </div>
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs border text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
@@ -102,43 +106,48 @@ function ProjectTeamTable({ project, users, setUsersDataChanged }) {
                             </td>
                         </tr>
                     ) : (
-                        currentUsers.map((user) => (
+                        currentUsers.map((currentUser) => (
                             <tr
-                                key={user.id}
+                                key={currentUser.id}
                                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover-bg-gray-600"
                             >
                                 <th
                                     scope="row"
                                     className="px-6 py-4 font-medium text-blue-700 whitespace-nowrap dark:text-white"
                                 >
-                                    {user.name}
+                                    {currentUser.name}
                                 </th>
                                 <td className="px-6 py-4">
-                                    <p>{user.email}</p>
+                                    <p>{currentUser.email}</p>
                                 </td>
-                                <td className="px-1 py-1">
-                                    <button
-                                        onClick={(e) => {
-                                            handleRemoveMember(e, user.id);
-                                        }}
-                                    >
-                                        <svg
-                                            className="w-4 h-4 text-gray-800 dark:text-white"
-                                            aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 18 20"
+                                {user.role != "developer" && (
+                                    <td className="px-1 py-1">
+                                        <button
+                                            onClick={(e) => {
+                                                handleRemoveMember(
+                                                    e,
+                                                    currentUser.id
+                                                );
+                                            }}
                                         >
-                                            <path
-                                                stroke="currentColor"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"
-                                            />
-                                        </svg>
-                                    </button>
-                                </td>
+                                            <svg
+                                                className="w-4 h-4 text-gray-800 dark:text-white"
+                                                aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 18 20"
+                                            >
+                                                <path
+                                                    stroke="currentColor"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    strokeWidth="2"
+                                                    d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"
+                                                />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                )}
                             </tr>
                         ))
                     )}

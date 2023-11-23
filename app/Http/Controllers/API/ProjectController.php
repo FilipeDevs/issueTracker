@@ -23,21 +23,41 @@ class ProjectController extends Controller
         return response()->json($projects);
     }
 
+    // Get all projects
     public function index(Request $request)
     {
+        // Only users with permission to manage projects can get all projects
+        if (!$request->user()->hasPermissionTo('manage_projects')) {
+            abort(403);
+        }
+
         $projects = Project::with('users')->get();
         return response()->json($projects);
     }
 
-    public function show($id)
+    // Show a specific project
+    public function show(Request $request, $id)
     {
-        // Show a specific project
+
         $project = Project::find($id);
+
+        // Only users that have permission to manage projects or user that are associated to the project can get the project
+        if (!$request->user()->hasPermissionTo('manage_projects') && !$project->users->contains($request->user())) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+
         return response()->json($project);
     }
 
     public function store(Request $request)
     {
+
+        // Only users with permission to manage projects can create a new project
+        if (!$request->user()->hasPermissionTo('manage_projects')) {
+            abort(403);
+        }
+
         $validatedData = $request->validate([
             'name' => 'required|string|between:5,25|unique:projects',
             'description' => 'required|string|max:100',
@@ -53,6 +73,12 @@ class ProjectController extends Controller
 
     public function update(Request $request, $id)
     {
+
+        // Only users with permission to manage projects can update a project
+        if (!$request->user()->hasPermissionTo('manage_projects')) {
+            abort(403);
+        }
+
         $validatedData = $request->validate([
             // Allow the current project's name
             'name' => 'string|between:5,25|unique:projects,name,' . $id,
@@ -76,8 +102,14 @@ class ProjectController extends Controller
         return response()->json($project);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+
+        // Only users with permission to manage projects can delete a project
+        if (!$request->user()->hasPermissionTo('manage_projects')) {
+            abort(403);
+        }
+
         // Delete a project from the database
         Project::destroy($id);
         return response()->json(null, 204);
@@ -86,6 +118,12 @@ class ProjectController extends Controller
     // Add new contributors to a specific project
     public function addTeamMembers(Request $request, $id)
     {
+
+        // Only users with permission to manage projects can add members to a project
+        if (!$request->user()->hasPermissionTo('manage_projects')) {
+            abort(403);
+        }
+
         $project = Project::find($id);
 
         if (!$project) {
@@ -104,6 +142,12 @@ class ProjectController extends Controller
 
     public function removeTeamMember(Request $request, $id)
     {
+
+        // Only users with permission to manage projects can remove members to a project
+        if (!$request->user()->hasPermissionTo('manage_projects')) {
+            abort(403);
+        }
+
         $project = Project::find($id);
 
         if (!$project) {

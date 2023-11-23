@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/users/assigned/{project}', [UserController::class, 'assignedUsers']);
 
-    Route::get('/projects/user/{usersId}', [ProjectController::class, 'userProjects']);
+    Route::get('/projects/user/{userId}', [ProjectController::class, 'userProjects']);
 
     Route::get('/projects/{id}', [ProjectController::class, 'show']);
 

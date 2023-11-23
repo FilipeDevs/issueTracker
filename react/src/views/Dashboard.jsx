@@ -14,8 +14,13 @@ function Dashboard() {
     return (
         <div className="p-4 sm:ml-64">
             <div className="text-center text-lg font-semibold bg-white rounded p-6 shadow-lg dark:bg-gray-900 mb-5">
-                Welcome, {user.name} ☕
+                <span>Welcome, {user.name} ☕</span>
+                <br />
+                <span className="text-sm text-gray-700 underline">
+                    Connected as : {user.role}
+                </span>
             </div>
+
             {user.role == "admin" || user.role == "admin" ? (
                 <DashboardTable />
             ) : (
