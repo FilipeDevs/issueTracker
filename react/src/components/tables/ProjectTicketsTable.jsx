@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../../utils/API";
 import Loading from "../Loading";
 import CreateTicket from "../forms/CreateTicket";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function ProjectTicketsTable({ project, users }) {
     let navigate = useNavigate();
@@ -52,7 +52,25 @@ function ProjectTicketsTable({ project, users }) {
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
             <div className="flex flex-grow p-5 bg-white dark:bg-gray-900 items-center justify-between">
-                <h3 className="text-1xl font-medium">Tickets</h3>
+                <div className="flex items-center">
+                    <svg
+                        className="w-5 h-5 mr-2 text-gray-800 dark:text-white"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 20 16"
+                    >
+                        <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M5 4 1 8l4 4m10-8 4 4-4 4M11 1 9 15"
+                        />
+                    </svg>
+                    <h3 className="text-1xl font-medium">Tickets</h3>
+                </div>
+
                 <button
                     type="button"
                     onClick={() => setIsModalTicketOpen(true)}
@@ -85,7 +103,11 @@ function ProjectTicketsTable({ project, users }) {
                     ) : (
                         currentTickets.map((ticket) => (
                             <tr
-                                onClick={() => {navigate(`/project/${project.id}/ticket/${ticket.id}`)}}
+                                onClick={() => {
+                                    navigate(
+                                        `/project/${project.id}/ticket/${ticket.id}`
+                                    );
+                                }}
                                 key={ticket.id}
                                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-100 dark:hover-bg-gray-600 cursor-pointer"
                             >
@@ -93,7 +115,7 @@ function ProjectTicketsTable({ project, users }) {
                                     scope="row"
                                     className="px-6 py-4 font-medium text-blue-700 whitespace-nowrap dark:text-white"
                                 >
-                                        {ticket.name}
+                                    {ticket.name}
                                 </th>
                                 <td className="px-6 py-4">
                                     <p>{ticket.description}</p>

@@ -212,7 +212,6 @@ const API = {
 
     updateCommentOnTicket: async (comment) => {
         try {
-            console.log(comment);
             const response = await axiosClient.put(
                 `/comments/${comment.id}`,
                 comment

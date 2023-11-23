@@ -1,4 +1,4 @@
-import { redirect, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ProjectTeamTable from "../components/tables/ProjectTeamTable";
 import ProjectTicketsTable from "../components/tables/ProjectTicketsTable";
 import { useEffect, useState } from "react";
