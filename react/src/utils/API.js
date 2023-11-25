@@ -221,6 +221,27 @@ const API = {
             return await Promise.reject(error);
         }
     },
+
+    updateUserRole: async (user) => {
+        try {
+            const response = await axiosClient.put(`/users/${user.id}`, {
+                role: user.role,
+            });
+            return response.data;
+        } catch (error) {
+            console.log("failed");
+            return await Promise.reject(error);
+        }
+    },
+
+    getUserTickets: async () => {
+        try {
+            const response = await axiosClient.get(`/tickets`);
+            return response.data;
+        } catch (error) {
+            return await Promise.reject(error);
+        }
+    },
 };
 
 export default API;

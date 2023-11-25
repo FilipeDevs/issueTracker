@@ -22,6 +22,7 @@ class UsersTableSeeder extends Seeder
                     ->limit(3)
                     ->get();
                 $user->projects()->attach($projects);
+                $user->assignRole('developer');
             });
 
         // For demo purposes create an admin and manager

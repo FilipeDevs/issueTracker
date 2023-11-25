@@ -15,7 +15,7 @@ class UserController extends Controller
             abort(403);
         }
 
-        $users = User::all();
+        $users = User::with('roles')->get();
 
         return response()->json($users);
     }
@@ -41,15 +41,22 @@ class UserController extends Controller
     }
 
     // Update the role of a user
-    public function updateRole(Request $request, $userId)
+    public function update(Request $request, $userId)
     {
+        $authenticatedUser = $request->user();
 
-        if (!$request->user()->hasPermissionTo('manage_users')) {
-            abort(403);
+        // Check if the authenticated user has permission to manage users
+        if (!$authenticatedUser->hasPermissionTo('manage_users')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Check if the authenticated user is trying to update their own role
+        if ($userId == $authenticatedUser->id) {
+            return response()->json(['message' => 'You cannot update your own role.'], 403);
         }
 
         $validatedData = $request->validate([
-            'role' => 'required|string|in:admin,manager,developer', // Adjust role values based on your application
+            'role' => 'required|string|in:admin,manager,developer',
         ]);
 
         $user = User::find($userId);
@@ -58,11 +65,15 @@ class UserController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
+        // Check if the user being updated is an admin
+        if ($user->hasRole('admin')) {
+            return response()->json(['message' => 'Cannot update the role of an admin user.'], 403);
+        }
+
         // Remove existing roles and assign the new role
         $user->syncRoles([$validatedData['role']]);
 
         return response()->json($user);
     }
-
 
 }

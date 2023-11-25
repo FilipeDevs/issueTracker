@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
+import API from "../../utils/API";
 
 function UsersTable({ users, updateUsers }) {
     // Pagination
@@ -20,6 +22,23 @@ function UsersTable({ users, updateUsers }) {
     const handlePreviousPage = () => {
         if (indexOfFirstUser > 0) {
             setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const handleUpdateRole = async (e, id) => {
+        e.preventDefault();
+        const selectedRole = e.target.value;
+        const user = {
+            id: id,
+            role: selectedRole,
+        };
+        try {
+            await API.updateUserRole(user);
+            updateUsers();
+            toast.warning("User role updated !");
+        } catch (error) {
+            console.log(error);
+            toast.error("Error updating user role !");
         }
     };
 
@@ -81,14 +100,18 @@ function UsersTable({ users, updateUsers }) {
 
                                 <td className="px-1 py-1">
                                     <select
+                                        defaultValue={currentUser.roles[0].name}
                                         id="roles"
+                                        onChange={(e) => {
+                                            handleUpdateRole(e, currentUser.id);
+                                        }}
                                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     >
                                         <option value="developer">
                                             Developer
                                         </option>
-                                        <option value="Manager">Manager</option>
-                                        <option value="Admin">Admin</option>
+                                        <option value="manager">Manager</option>
+                                        <option value="admin">Admin</option>
                                     </select>
                                 </td>
                             </tr>

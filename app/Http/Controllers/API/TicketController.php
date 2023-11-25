@@ -6,10 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class TicketController extends Controller
 {
+
+    // Get all tickets associated with the user
+    public function index(Request $request)
+    {
+        $user = $request->user();
+        $tickets = $user->tickets;
+        return response()->json($tickets);
+    }
+
     // Get all the tickets of a specific project
     public function getProjectTickets(Request $request, int $project_id)
     {
