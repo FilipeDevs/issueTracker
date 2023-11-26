@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class TicketController extends Controller
@@ -16,14 +15,17 @@ class TicketController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $tickets = $user->tickets;
+        $tickets = $user->tickets()->orderByRaw("FIELD(status, 'new', 'in progress', 'closed')")->get();
         return response()->json($tickets);
     }
 
     // Get all the tickets of a specific project
     public function getProjectTickets(Request $request, int $project_id)
     {
-        $tickets = Ticket::where("project_id", $project_id)->get();
+        $tickets = Ticket::where("project_id", $project_id)
+            ->orderByRaw("FIELD(status, 'new', 'in progress', 'closed')")
+            ->get();
+
         return response()->json($tickets);
     }
 

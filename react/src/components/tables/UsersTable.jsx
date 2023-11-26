@@ -1,11 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import API from "../../utils/API";
+import Loading from "../Loading";
 
-function UsersTable({ users, updateUsers }) {
+function UsersTable() {
+    const [usersDataChanged, setUsersDataChanged] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        const fectUsers = async () => {
+            try {
+                setLoading(true);
+                const usersData = await API.getUsers();
+                setUsers(usersData);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        };
+        fectUsers();
+    }, [usersDataChanged]);
+
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(15);
+    const [itemsPerPage] = useState(10);
 
     // Pagination Logic
     const indexOfLastUser = currentPage * itemsPerPage;
@@ -34,13 +53,21 @@ function UsersTable({ users, updateUsers }) {
         };
         try {
             await API.updateUserRole(user);
-            updateUsers();
+            setUsersDataChanged(!usersDataChanged);
             toast.warning("User role updated !");
         } catch (error) {
             console.log(error);
             toast.error("Error updating user role !");
+            setUsersDataChanged(!usersDataChanged);
         }
     };
+
+    if (loading)
+        return (
+            <div className="flex items-center justify-center">
+                <Loading />
+            </div>
+        );
 
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">

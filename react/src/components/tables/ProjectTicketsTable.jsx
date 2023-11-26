@@ -89,7 +89,7 @@ function ProjectTicketsTable({ project, users }) {
                             Description
                         </th>
                         <th scope="col" className="px-6 py-2">
-                            Author
+                            Status
                         </th>
                     </tr>
                 </thead>
@@ -121,7 +121,7 @@ function ProjectTicketsTable({ project, users }) {
                                     <p>{ticket.description}</p>
                                 </td>
                                 <td className="px-6 py-4">
-                                    <p>{ticket.author_name}</p>
+                                    <p className="uppercase">{ticket.status}</p>
                                 </td>
                             </tr>
                         ))

@@ -1,34 +1,6 @@
-import { useEffect, useState } from "react";
-import API from "../utils/API";
-import Loading from "../components/Loading";
 import UsersTable from "../components/tables/UsersTable";
 
 function Users() {
-    const [usersDataChanged, setUsersDataChanged] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [users, setUsers] = useState({});
-
-    useEffect(() => {
-        const fectUsers = async () => {
-            try {
-                setLoading(true);
-                const usersData = await API.getUsers();
-                setUsers(usersData);
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching users:", error);
-            }
-        };
-        fectUsers();
-    }, [usersDataChanged]);
-
-    if (loading)
-        return (
-            <div className="flex items-center justify-center">
-                <Loading />
-            </div>
-        );
-
     return (
         <div className="p-4 sm:ml-64">
             <div className="mb-2 p-4 flex items-center justify-center shadow-md sm:rounded-lg bg-white">
@@ -45,10 +17,7 @@ function Users() {
                     Manage Users
                 </h2>
             </div>
-            <UsersTable
-                users={users}
-                updateUsers={() => setUsersDataChanged(!usersDataChanged)}
-            />
+            <UsersTable />
         </div>
     );
 }

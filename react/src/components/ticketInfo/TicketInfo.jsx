@@ -86,15 +86,24 @@ function TicketInfo({ id, projectId }) {
                 </div>
                 <div className="mb-4">
                     <label className="font-bold">Type:</label>
-                    <p>{ticket.type}</p>
+                    <br />
+                    <span className="uppercase bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                        {ticket.type}
+                    </span>
                 </div>
                 <div className="mb-4">
                     <label className="font-bold">Status:</label>
-                    <p>{ticket.status}</p>
+                    <br />
+                    <span className="uppercase bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                        {ticket.status}
+                    </span>
                 </div>
                 <div className="mb-4">
                     <label className="font-bold">Priority:</label>
-                    <p>{ticket.priority}</p>
+                    <br />
+                    <span className="uppercase bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                        {ticket.priority}
+                    </span>
                 </div>
                 <div className="mb-4">
                     <label className="font-bold">Time estimate:</label>
@@ -102,7 +111,7 @@ function TicketInfo({ id, projectId }) {
                 </div>
                 <div className="mb-4">
                     <Link
-                        className="font-bold underline"
+                        className="font-bold underline hover:text-blue-800"
                         to={`/project/${ticket.project_id}`}
                     >
                         Associated Project
