@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import API from "../../utils/API";
-import Loading from "../Loading";
+import { useState } from "react";
 import CreateTicket from "../forms/CreateTicket";
 import { useNavigate } from "react-router-dom";
 
-function ProjectTicketsTable({ project, users }) {
+function ProjectTicketsTable({
+    tickets,
+    users,
+    projectId,
+    ticketsDataChanged,
+}) {
     let navigate = useNavigate();
-    const [tickets, setTickets] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [isModalTicketOpen, setIsModalTicketOpen] = useState(false);
-    const [ticketsDataChanged, setTicketsDataChanged] = useState(false);
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -32,22 +32,6 @@ function ProjectTicketsTable({ project, users }) {
             setCurrentPage(currentPage - 1);
         }
     };
-
-    // Fetch all tickets
-    useEffect(() => {
-        const fetchProjectTickets = async () => {
-            try {
-                setLoading(true);
-                const data = await API.getProjectTickets(project.id);
-                setTickets(data);
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching users:", error);
-            }
-        };
-
-        fetchProjectTickets();
-    }, [ticketsDataChanged, project]);
 
     return (
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-white">
@@ -94,38 +78,30 @@ function ProjectTicketsTable({ project, users }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {loading ? (
-                        <tr>
-                            <td colSpan="4">
-                                <Loading />
+                    {currentTickets.map((ticket) => (
+                        <tr
+                            onClick={() => {
+                                navigate(
+                                    `/project/${project.id}/ticket/${ticket.id}`
+                                );
+                            }}
+                            key={ticket.id}
+                            className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-100 dark:hover-bg-gray-600 cursor-pointer"
+                        >
+                            <th
+                                scope="row"
+                                className="px-6 py-4 font-medium text-blue-700 whitespace-nowrap dark:text-white"
+                            >
+                                {ticket.name}
+                            </th>
+                            <td className="px-6 py-4">
+                                <p>{ticket.description}</p>
+                            </td>
+                            <td className="px-6 py-4">
+                                <p className="uppercase">{ticket.status}</p>
                             </td>
                         </tr>
-                    ) : (
-                        currentTickets.map((ticket) => (
-                            <tr
-                                onClick={() => {
-                                    navigate(
-                                        `/project/${project.id}/ticket/${ticket.id}`
-                                    );
-                                }}
-                                key={ticket.id}
-                                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-blue-100 dark:hover-bg-gray-600 cursor-pointer"
-                            >
-                                <th
-                                    scope="row"
-                                    className="px-6 py-4 font-medium text-blue-700 whitespace-nowrap dark:text-white"
-                                >
-                                    {ticket.name}
-                                </th>
-                                <td className="px-6 py-4">
-                                    <p>{ticket.description}</p>
-                                </td>
-                                <td className="px-6 py-4">
-                                    <p className="uppercase">{ticket.status}</p>
-                                </td>
-                            </tr>
-                        ))
-                    )}
+                    ))}
                 </tbody>
             </table>
             <div className="flex p-5">
@@ -156,10 +132,8 @@ function ProjectTicketsTable({ project, users }) {
                     <CreateTicket
                         onClose={() => setIsModalTicketOpen(false)}
                         users={users}
-                        ticketsDataChanged={() => {
-                            setTicketsDataChanged(!ticketsDataChanged);
-                        }}
-                        project_id={project.id}
+                        ticketsDataChanged={ticketsDataChanged}
+                        project_id={projectId}
                     />
                 )}
             </div>

@@ -50,8 +50,14 @@ function TicketInfo({ id, projectId }) {
     return (
         <div className="flex">
             <div className="flex-1 pr-8">
-                <h1 className="text-2xl font-bold mb-4 mr-2">{ticket.name}</h1>
-                <p className="text-gray-600">{ticket.description}</p>
+                <div className="mb-2 p-4 text-center shadow-md sm:rounded-lg bg-white">
+                    <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                        {ticket.name}
+                    </h2>
+                    <p className="text-lg text-gray-600 dark:text-gray-400">
+                        {ticket.description}
+                    </p>
+                </div>
                 <Comments ticket_id={id} formatTimestamp={formatTimestamp} />
             </div>
 

@@ -5,8 +5,7 @@ function UserLayout() {
     return (
         <main className="">
             <Sidebar />
-            <div className="h-screen">
-                <h1></h1>
+            <div className="h-screen bg-zinc-200">
                 <Outlet />
             </div>
         </main>

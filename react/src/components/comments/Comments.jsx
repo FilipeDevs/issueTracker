@@ -118,7 +118,7 @@ function Comments({ ticket_id, formatTimestamp }) {
 
     return (
         <div className="">
-            <div className="w-full bg-white rounded-lg border p-2 my-4 mx-6">
+            <div className="w-fullrounded-lg border p-5 shadow-md sm:rounded-lg bg-white">
                 <h3 className="font-bold text-2xl">Comments</h3>
                 {currentComments.length === 0 ? (
                     <p className="text-gray-500 py-10 mx-6 text-lg">
