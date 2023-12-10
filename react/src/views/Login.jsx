@@ -45,6 +45,27 @@ function Login() {
 
     return (
         <div className="max-w-md mx-auto m-10 p-6 bg-white rounded-md shadow-md dark:bg-gray-900">
+            <div className="flex items-center justify-center">
+                <svg
+                    className="w-8 h-8 text-gray-800 dark:text-white mr-2 mb-4"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 19 20"
+                >
+                    <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M7 3 6 2V1m5 2 1-1V1M9 7v11M9 7a5 5 0 0 1 5 5M9 7a5 5 0 0 0-5 5m5-5a4.959 4.959 0 0 1 2.973 1H12V6a3 3 0 0 0-6 0v2h.027A4.959 4.959 0 0 1 9 7Zm-5 5H1m3 0v2a5 5 0 0 0 10 0v-2m3 0h-3m-9.975 4H2a1 1 0 0 0-1 1v2m13-3h2.025a1 1 0 0 1 1 1v2M13 9h2.025a1 1 0 0 0 1-1V6m-11 3H3a1 1 0 0 1-1-1V6"
+                    />
+                </svg>
+                <h1 className="block mb-5 text-4xl font-medium text-gray-900 dark:text-white text-center">
+                    IssueTracker
+                </h1>
+            </div>
+
             <h1 className="block mb-5 text-2xl font-medium text-gray-900 dark:text-white text-center">
                 Log in
             </h1>
