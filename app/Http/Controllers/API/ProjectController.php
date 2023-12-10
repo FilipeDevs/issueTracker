@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 class ProjectController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('can:manage_projects')->except(['userProjects', 'show']);
+    }
+
     public function userProjects($userId)
     {
         $user = User::find($userId);

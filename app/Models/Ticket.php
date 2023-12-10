@@ -31,4 +31,9 @@ class Ticket extends Model
     {
         return $this->belongsTo(Project::class);
     }
+
+    public function scopeOrderedByStatus($query)
+    {
+        return $query->orderByRaw("FIELD(status, 'new', 'in progress', 'closed')");
+    }
 }

@@ -82,7 +82,7 @@ function ProjectTicketsTable({
                         <tr
                             onClick={() => {
                                 navigate(
-                                    `/project/${project.id}/ticket/${ticket.id}`
+                                    `/project/${ticket.project_id}/ticket/${ticket.id}`
                                 );
                             }}
                             key={ticket.id}

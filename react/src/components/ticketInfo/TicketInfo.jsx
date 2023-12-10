@@ -83,36 +83,36 @@ function TicketInfo({ id, projectId }) {
                 </div>
 
                 <div className="mb-4">
-                    <label className="font-bold">Assignee:</label>
+                    <span className="font-bold">Assignee:</span>
                     <p>{ticket.assignee_name}</p>
                 </div>
                 <div className="mb-4">
-                    <label className="font-bold">Author:</label>
+                    <span className="font-bold">Author:</span>
                     <p>{ticket.author_name}</p>
                 </div>
                 <div className="mb-4">
-                    <label className="font-bold">Type:</label>
+                    <span className="font-bold">Type:</span>
                     <br />
                     <span className="uppercase bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
                         {ticket.type}
                     </span>
                 </div>
                 <div className="mb-4">
-                    <label className="font-bold">Status:</label>
+                    <span className="font-bold">Status:</span>
                     <br />
                     <span className="uppercase bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
                         {ticket.status}
                     </span>
                 </div>
                 <div className="mb-4">
-                    <label className="font-bold">Priority:</label>
+                    <span className="font-bold">Priority:</span>
                     <br />
                     <span className="uppercase bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
                         {ticket.priority}
                     </span>
                 </div>
                 <div className="mb-4">
-                    <label className="font-bold">Time estimate:</label>
+                    <span className="font-bold">Time estimate:</span>
                     <p>{ticket.time_estimate} hours</p>
                 </div>
                 <div className="mb-4">
@@ -124,11 +124,11 @@ function TicketInfo({ id, projectId }) {
                     </Link>
                 </div>
                 <div className="mb-4">
-                    <label className="font-bold">Created At:</label>
+                    <span className="font-bold">Created At:</span>
                     <p>{formatTimestamp(ticket.created_at)}</p>
                 </div>
                 <div className="mb-4">
-                    <label className="font-bold">Updated At:</label>
+                    <span className="font-bold">Updated At:</span>
                     <p>{formatTimestamp(ticket.updated_at)}</p>
                 </div>
             </div>

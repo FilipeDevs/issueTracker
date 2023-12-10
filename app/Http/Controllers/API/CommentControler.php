@@ -20,7 +20,7 @@ class CommentControler extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'comment' => 'required|string',
+            'comment' => 'required|string|max:255',
             'ticket_id' => 'required|integer',
         ]);
 

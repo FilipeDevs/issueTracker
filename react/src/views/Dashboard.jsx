@@ -21,7 +21,7 @@ function Dashboard() {
                 </span>
             </div>
 
-            {user.role == "admin" || user.role == "admin" ? (
+            {user.role == "admin" || user.role == "manager" ? (
                 <DashboardTable />
             ) : (
                 <DeveloperDashboardTable />

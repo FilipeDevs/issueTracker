@@ -95,15 +95,33 @@ function Project() {
                     />
                 </div>
             </div>
-            <div className="mb-2 p-4 text-center shadow-md sm:rounded-lg bg-white">
-                <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
-                    Stats
+            <div className="mb-2 mt-5 p-4 text-center shadow-md sm:rounded-lg bg-white">
+                <h2 className="mb-5 text-2xl font-semibold text-gray-900 dark:text-white">
+                    Statistics
                 </h2>
-                <TicketsPieChart
-                    tickets={tickets}
-                    title={"Tickets by type"}
-                    filter={"status"}
-                />
+                <div className="flex w-full">
+                    <div className="mr-4 w-full">
+                        <TicketsPieChart
+                            tickets={tickets}
+                            title={"Tickets by status"}
+                            filter={"status"}
+                        />
+                    </div>
+                    <div className="mr-4 w-full">
+                        <TicketsPieChart
+                            tickets={tickets}
+                            title={"Tickets by type"}
+                            filter={"type"}
+                        />
+                    </div>
+                    <div className="mr-4 w-full">
+                        <TicketsPieChart
+                            tickets={tickets}
+                            title={"Tickets by priority"}
+                            filter={"priority"}
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     );

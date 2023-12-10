@@ -83,6 +83,7 @@ function Comments({ ticket_id, formatTimestamp }) {
             await API.postCommentOnTicket(comment);
             setCommentsDataChanaged(!commentsDataChanaged);
             toast.success("Comment posted with success !");
+            e.target.reset();
         } catch (error) {
             console.error(
                 "Error creating new ticket!",
@@ -142,7 +143,7 @@ function Comments({ ticket_id, formatTimestamp }) {
                                         <div className="items-center">
                                             <div className="items-center">
                                                 <input
-                                                    className="border rounded-md mt-2"
+                                                    className="border rounded-md mt-2 w-9/12"
                                                     type="text"
                                                     value={commentText}
                                                     onChange={handleInputChange}
@@ -178,7 +179,7 @@ function Comments({ ticket_id, formatTimestamp }) {
                                 </div>
                                 {user.id == comment.author_id && (
                                     <svg
-                                        className="w-4 h-4 text-gray-800 dark:text-white"
+                                        className="w-4 h-4 text-gray-800 dark:text-white cursor-pointer"
                                         aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor"

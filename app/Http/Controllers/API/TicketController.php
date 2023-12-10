@@ -15,7 +15,7 @@ class TicketController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $tickets = $user->tickets()->orderByRaw("FIELD(status, 'new', 'in progress', 'closed')")->get();
+        $tickets = $user->tickets()->orderedByStatus()->get();
         return response()->json($tickets);
     }
 
@@ -23,7 +23,7 @@ class TicketController extends Controller
     public function getProjectTickets(Request $request, int $project_id)
     {
         $tickets = Ticket::where("project_id", $project_id)
-            ->orderByRaw("FIELD(status, 'new', 'in progress', 'closed')")
+            ->orderedByStatus()
             ->get();
 
         return response()->json($tickets);

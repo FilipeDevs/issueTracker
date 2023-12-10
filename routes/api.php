@@ -7,7 +7,6 @@ use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Auth\Middleware\Authorize;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -16,37 +15,31 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Only admins can manage users
     Route::group(['middleware' => ['role:admin']], function () {
-        Route::resource('users', UserController::class);
+        Route::apiResource('users', UserController::class)->except(['index']);
     });
 
-    // Only admins and managers can manage projects (create/update/delete, manage members...)
     Route::group(['middleware' => ['role:admin|manager']], function () {
+        Route::prefix('projects')->group(function () {
+            Route::put('/addMembers/{id}', [ProjectController::class, 'addTeamMembers']);
+            Route::put('/removeMember/{id}', [ProjectController::class, 'removeTeamMember']);
+            Route::apiResource('/', ProjectController::class)->except(['show']);
+        });
 
-        Route::put('/projects/addMembers/{id}', [ProjectController::class, 'addTeamMembers']);
-        Route::put('/projects/removeMember/{id}', [ProjectController::class, 'removeTeamMember']);
+        Route::get('/users', [UserController::class, 'index']);
         Route::get('/users/available/{project}', [UserController::class, 'availableUsers']);
-        Route::resource('projects', ProjectController::class)->except(['show']);
-
     });
 
     Route::get('/users/assigned/{project}', [UserController::class, 'assignedUsers']);
-
     Route::get('/projects/user/{userId}', [ProjectController::class, 'userProjects']);
-
     Route::get('/projects/{id}', [ProjectController::class, 'show']);
 
-    Route::resource('tickets', TicketController::class);
-
-    Route::resource('comments', CommentControler::class);
-
+    Route::apiResource('tickets', TicketController::class);
     Route::get('/tickets/{user}', [TicketController::class, 'indexUser']);
-
     Route::get('/tickets/project/{project_id}', [TicketController::class, 'getProjectTickets']);
 
+    Route::apiResource('comments', CommentControler::class);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
-
 Route::post('/login', [AuthController::class, 'login']);

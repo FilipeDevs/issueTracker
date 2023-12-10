@@ -28,6 +28,7 @@ function TicketsPieChart({ title, tickets, filter }) {
 
     return (
         <div>
+            <h2>{title}</h2>
             <Chart
                 chartType="PieChart"
                 data={
@@ -38,9 +39,8 @@ function TicketsPieChart({ title, tickets, filter }) {
                           ]
                         : [["Ticket Type", "Number of Tickets"]]
                 }
-                options={{ title: title }}
                 width={"100%"}
-                height={"100px"}
+                height={"250px"}
             />
         </div>
     );

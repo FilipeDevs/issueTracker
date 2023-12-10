@@ -1,5 +1,5 @@
 import { Collapse } from "flowbite";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import API from "../utils/API";
 import { useStateContext } from "../contexts/ContextProvider";
 import { toast } from "react-toastify";
@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 function Sidebar() {
     const { setUser, setToken, user } = useStateContext();
+    let navigate = useNavigate();
 
     const handleLogout = async (e) => {
         e.preventDefault();
@@ -14,6 +15,7 @@ function Sidebar() {
             await API.logout();
             setUser(null);
             setToken(null);
+            navigate("/");
         } catch (errors) {
             toast.error("Error logging out!");
             console.error(errors);
@@ -109,7 +111,7 @@ function Sidebar() {
                                 </span>
                             </Link>
                         </li>
-                        {user.role != "developer" && (
+                        {user.role == "admin" && (
                             <li>
                                 <Link
                                     to={"/users"}
