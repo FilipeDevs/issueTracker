@@ -66,8 +66,8 @@ class TicketController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|between:5,20',
-            'description' => 'required|string|max:100',
+            'name' => 'required|string|between:5,40',
+            'description' => 'required|string|max:200',
             'type' => ['required', Rule::in(['issue', 'feature', 'bug'])],
             'status' => ['required', Rule::in(['closed', 'new', 'in progress'])],
             'priority' => ['required', Rule::in(['low', 'medium', 'high', 'immediate'])],

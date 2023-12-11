@@ -23,8 +23,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::prefix('projects')->group(function () {
             Route::put('/addMembers/{id}', [ProjectController::class, 'addTeamMembers']);
             Route::put('/removeMember/{id}', [ProjectController::class, 'removeTeamMember']);
-            Route::apiResource('/', ProjectController::class)->except(['show']);
+
         });
+        Route::apiResource('projects', ProjectController::class)->except(['show']);
 
         Route::get('/users', [UserController::class, 'index']);
         Route::get('/users/available/{project}', [UserController::class, 'availableUsers']);
