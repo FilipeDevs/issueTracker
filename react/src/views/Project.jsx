@@ -5,8 +5,11 @@ import { useEffect, useState } from "react";
 import API from "../utils/API";
 import Loading from "../components/Loading";
 import TicketsPieChart from "../components/Charts/TicketsPieChart";
+import { useStateContext } from "../contexts/ContextProvider";
+import { Navigate } from "react-router-dom";
 
 function Project() {
+    const { token } = useStateContext();
     const { id } = useParams();
     const [project, setProject] = useState({});
     const [loading, setLoading] = useState(true);
@@ -56,6 +59,11 @@ function Project() {
 
         fetchProjectTickets();
     }, [id, ticketsDataChanged]);
+
+    if (!token) {
+        // Redirect user if they are not authenticated
+        return <Navigate to="/" />;
+    }
 
     if (loading)
         return (

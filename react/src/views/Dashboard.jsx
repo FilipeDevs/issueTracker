@@ -8,7 +8,7 @@ function Dashboard() {
 
     if (!token) {
         // Redirect user if they are not authenticated
-        return <Navigate to="/login" />;
+        return <Navigate to="/" />;
     }
 
     return (

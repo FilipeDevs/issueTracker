@@ -1,6 +1,15 @@
 import UsersTable from "../components/tables/UsersTable";
+import { Navigate } from "react-router-dom";
+import { useStateContext } from "../contexts/ContextProvider";
 
 function Users() {
+    const { token } = useStateContext();
+
+    if (!token) {
+        // Redirect user if they are not authenticated
+        return <Navigate to="/" />;
+    }
+
     return (
         <div className="p-4 sm:ml-64">
             <div className="mb-2 p-4 flex items-center justify-center shadow-md sm:rounded-lg bg-white">
